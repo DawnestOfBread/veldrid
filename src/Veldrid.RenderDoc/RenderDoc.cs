@@ -1,9 +1,9 @@
-﻿using NativeLibraryLoader;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using NativeLibrary = System.Runtime.InteropServices.NativeLibrary;
 
 namespace Veldrid
 {
@@ -14,12 +14,12 @@ namespace Veldrid
     public unsafe class RenderDoc
     {
         private readonly RENDERDOC_API_1_4_0 _api;
-        private readonly NativeLibrary _nativeLib;
+        private readonly IntPtr _nativeLib;
 
-        private unsafe RenderDoc(NativeLibrary lib)
+        private unsafe RenderDoc(IntPtr lib)
         {
             _nativeLib = lib;
-            pRENDERDOC_GetAPI getApiFunc = _nativeLib.LoadFunction<pRENDERDOC_GetAPI>("RENDERDOC_GetAPI");
+            pRENDERDOC_GetAPI getApiFunc = Marshal.GetDelegateForFunctionPointer<pRENDERDOC_GetAPI>(NativeLibrary.GetExport(_nativeLib, "RENDERDOC_GetAPI"));
             void* apiPointers;
             int result = getApiFunc(RENDERDOC_Version.API_Version_1_2_0, &apiPointers);
             if (result != 1)
@@ -345,21 +345,12 @@ namespace Veldrid
         /// Attempts to load RenderDoc using system-default names and paths.
         /// </summary>
         /// <param name="renderDoc">If successful, this parameter contains a loaded <see cref="RenderDoc"/> instance.</param>
-        /// <returns>Whether or not RenderDoc was successfully loaded.</returns>
-        public static bool Load(out RenderDoc renderDoc) => Load(GetLibNames(), out renderDoc);
-
-        /// Attempts to load RenderDoc from the given path.
-        /// </summary>
-        /// <param name="renderDocLibPath">The path to the RenderDoc shared library.</param>
-        /// <param name="renderDoc">If successful, this parameter contains a loaded <see cref="RenderDoc"/> instance.</param>
-        /// <returns>Whether or not RenderDoc was successfully loaded.</returns>
-        public static bool Load(string renderDocLibPath, out RenderDoc renderDoc) => Load(new[] { renderDocLibPath }, out renderDoc);
-
-        private static bool Load(string[] renderDocLibPaths, out RenderDoc renderDoc)
+        /// <returns>Whether RenderDoc was successfully loaded.</returns>
+        public static bool Load(out RenderDoc renderDoc)
         {
             try
             {
-                NativeLibrary lib = new NativeLibrary(renderDocLibPaths);
+                IntPtr lib = NativeLibrary.Load(GetLibName());
                 renderDoc = new RenderDoc(lib);
                 return true;
             }
@@ -370,32 +361,11 @@ namespace Veldrid
             }
         }
 
-        private static string[] GetLibNames()
+        private static string GetLibName()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                List<string> paths = new List<string>();
-                string programFiles = Environment.GetEnvironmentVariable("ProgramFiles");
-                if (programFiles != null)
-                {
-                    string systemInstallPath = Path.Combine(programFiles, "RenderDoc", "renderdoc.dll");
-                    if (File.Exists(systemInstallPath))
-                    {
-                        paths.Add(systemInstallPath);
-                    }
-                }
-                paths.Add("renderdoc.dll");
-
-                return paths.ToArray();
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                return new[] { "librenderdoc.dylib" };
-            }
-            else
-            {
-                return new[] { "librenderdoc.so" };
-            }
+                return "renderdoc.dll";
+            return RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? "librenderdoc.dylib" : "librenderdoc.so";
         }
     }
 }
