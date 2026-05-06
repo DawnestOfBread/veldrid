@@ -15,14 +15,14 @@ namespace Veldrid.Sdl2
 {
     public unsafe class Sdl2Window
     {
-        private readonly List<SDL_Event> _events = new List<SDL_Event>();
+        private readonly List<SDL_Event> _events = [];
         private IntPtr _window;
         internal uint WindowID { get; private set; }
         private bool _exists;
 
-        private SimpleInputSnapshot _publicSnapshot = new SimpleInputSnapshot();
-        private SimpleInputSnapshot _privateSnapshot = new SimpleInputSnapshot();
-        private SimpleInputSnapshot _privateBackbuffer = new SimpleInputSnapshot();
+        private SimpleInputSnapshot _publicSnapshot = new();
+        private SimpleInputSnapshot _privateSnapshot = new();
+        private SimpleInputSnapshot _privateBackbuffer = new();
 
         // Threaded Sdl2Window flags
         private readonly bool _threadedProcessing;
@@ -38,8 +38,8 @@ namespace Veldrid.Sdl2
         private Vector2 _currentMouseDelta;
 
         // Cached Sdl2Window state (for threaded processing)
-        private BufferedValue<Point> _cachedPosition = new BufferedValue<Point>();
-        private BufferedValue<Point> _cachedSize = new BufferedValue<Point>();
+        private BufferedValue<Point> _cachedPosition = new();
+        private BufferedValue<Point> _cachedSize = new();
         private string _cachedWindowTitle;
         private bool _newWindowTitleReceived;
         private bool _firstMouseEvent = true;
@@ -51,9 +51,9 @@ namespace Veldrid.Sdl2
             _threadedProcessing = threadedProcessing;
             if (threadedProcessing)
             {
-                using (ManualResetEvent mre = new ManualResetEvent(false))
+                using (ManualResetEvent mre = new(false))
                 {
-                    WindowParams wp = new WindowParams()
+                    WindowParams wp = new()
                     {
                         Title = title,
                         X = x,
@@ -82,9 +82,9 @@ namespace Veldrid.Sdl2
             _threadedProcessing = threadedProcessing;
             if (threadedProcessing)
             {
-                using (ManualResetEvent mre = new ManualResetEvent(false))
+                using (ManualResetEvent mre = new(false))
                 {
-                    WindowParams wp = new WindowParams()
+                    WindowParams wp = new()
                     {
                         WindowHandle = windowHandle,
                         WindowFlags = 0,
@@ -197,7 +197,7 @@ namespace Veldrid.Sdl2
 
         public Vector2 ScaleFactor => Vector2.One;
 
-        public Rectangle Bounds => new Rectangle(_cachedPosition, GetWindowSize());
+        public Rectangle Bounds => new(_cachedPosition, GetWindowSize());
 
         public bool CursorVisible
         {
@@ -327,7 +327,7 @@ namespace Veldrid.Sdl2
             wp.ResetEvent.Set();
 
             double previousPollTimeMs = 0;
-            Stopwatch sw = new Stopwatch();
+            Stopwatch sw = new();
             sw.Start();
 
             while (_exists)
@@ -518,7 +518,7 @@ namespace Veldrid.Sdl2
             bool down = mouseButtonEvent.state == 1;
             _currentMouseButtonStates[(int)button] = down;
             _privateSnapshot.MouseDown[(int)button] = down;
-            MouseEvent mouseEvent = new MouseEvent(button, down);
+            MouseEvent mouseEvent = new(button, down);
             _privateSnapshot.MouseEventsList.Add(mouseEvent);
             if (down)
             {
@@ -551,8 +551,8 @@ namespace Veldrid.Sdl2
 
         private void HandleMouseMotionEvent(SDL_MouseMotionEvent mouseMotionEvent)
         {
-            Vector2 mousePos = new Vector2(mouseMotionEvent.x, mouseMotionEvent.y);
-            Vector2 delta = new Vector2(mouseMotionEvent.xrel, mouseMotionEvent.yrel);
+            Vector2 mousePos = new(mouseMotionEvent.x, mouseMotionEvent.y);
+            Vector2 delta = new(mouseMotionEvent.xrel, mouseMotionEvent.yrel);
             _currentMouseX = (int)mousePos.X;
             _currentMouseY = (int)mousePos.Y;
             _privateSnapshot.MousePosition = mousePos;
@@ -569,7 +569,7 @@ namespace Veldrid.Sdl2
         private void HandleKeyboardEvent(SDL_KeyboardEvent keyboardEvent)
         {
             SimpleInputSnapshot snapshot = _privateSnapshot;
-            KeyEvent keyEvent = new KeyEvent(MapKey(keyboardEvent.keysym), keyboardEvent.state == 1, MapModifierKeys(keyboardEvent.keysym.mod), keyboardEvent.repeat == 1);
+            KeyEvent keyEvent = new(MapKey(keyboardEvent.keysym), keyboardEvent.state == 1, MapModifierKeys(keyboardEvent.keysym.mod), keyboardEvent.repeat == 1);
             snapshot.KeyEventsList.Add(keyEvent);
             if (keyboardEvent.state == 1)
             {
@@ -979,9 +979,9 @@ namespace Veldrid.Sdl2
 
         private class SimpleInputSnapshot : InputSnapshot
         {
-            public List<KeyEvent> KeyEventsList { get; private set; } = new List<KeyEvent>();
-            public List<MouseEvent> MouseEventsList { get; private set; } = new List<MouseEvent>();
-            public List<char> KeyCharPressesList { get; private set; } = new List<char>();
+            public List<KeyEvent> KeyEventsList { get; private set; } = [];
+            public List<MouseEvent> MouseEventsList { get; private set; } = [];
+            public List<char> KeyCharPressesList { get; private set; } = [];
 
             public IReadOnlyList<KeyEvent> KeyEvents => KeyEventsList;
 
@@ -1167,8 +1167,8 @@ namespace Veldrid.Sdl2
             }
         }
 
-        private ValueHolder Current = new ValueHolder();
-        private ValueHolder Back = new ValueHolder();
+        private ValueHolder Current = new();
+        private ValueHolder Back = new();
 
         public static implicit operator T(BufferedValue<T> bv) => bv.Value;
 

@@ -15,7 +15,7 @@ namespace Veldrid.NeoDemo.Objects
 
         public override void CreateDeviceObjects(GraphicsDevice gd, CommandList cl, SceneContext sc)
         {
-            DisposeCollectorResourceFactory factory = new DisposeCollectorResourceFactory(gd.ResourceFactory);
+            DisposeCollectorResourceFactory factory = new(gd.ResourceFactory);
             _disposeCollector = factory.DisposeCollector;
 
             ResourceLayout resourceLayout = factory.CreateResourceLayout(new ResourceLayoutDescription(
@@ -24,7 +24,7 @@ namespace Veldrid.NeoDemo.Objects
 
             (Shader vs, Shader fs) = StaticResourceCache.GetShaders(gd, gd.ResourceFactory, "FullScreenQuad");
 
-            GraphicsPipelineDescription pd = new GraphicsPipelineDescription(
+            GraphicsPipelineDescription pd = new(
                 new BlendStateDescription(
                     RgbaFloat.Black,
                     BlendAttachmentDescription.OverrideBlend),
@@ -32,15 +32,14 @@ namespace Veldrid.NeoDemo.Objects
                 new RasterizerStateDescription(FaceCullMode.Back, PolygonFillMode.Solid, FrontFace.Clockwise, true, false),
                 PrimitiveTopology.TriangleList,
                 new ShaderSetDescription(
-                    new[]
-                    {
+                    [
                         new VertexLayoutDescription(
                             new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2),
                             new VertexElementDescription("TexCoords", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2))
-                    },
-                    new[] { vs, fs },
+                    ],
+                    [vs, fs],
                     ShaderHelper.GetSpecializations(gd)),
-                new ResourceLayout[] { resourceLayout },
+                [resourceLayout],
                 gd.SwapchainFramebuffer.OutputDescription);
             _pipeline = factory.CreateGraphicsPipeline(ref pd);
 
@@ -79,6 +78,6 @@ namespace Veldrid.NeoDemo.Objects
         {
         }
 
-        private static ushort[] s_quadIndices = new ushort[] { 0, 1, 2, 0, 2, 3 };
+        private static ushort[] s_quadIndices = [0, 1, 2, 0, 2, 3];
     }
 }

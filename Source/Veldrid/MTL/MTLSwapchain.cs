@@ -45,7 +45,7 @@ namespace Veldrid.MTL
             SwapchainSource source = description.Source;
             if (source is NSWindowSwapchainSource nsWindowSource)
             {
-                NSWindow nswindow = new NSWindow(nsWindowSource.NSWindow);
+                NSWindow nswindow = new(nsWindowSource.NSWindow);
                 NSView contentView = nswindow.contentView;
                 CGSize windowContentSize = contentView.frame.size;
                 width = (uint)windowContentSize.width;
@@ -60,7 +60,7 @@ namespace Veldrid.MTL
             }
             else if (source is NSViewSwapchainSource nsViewSource)
             {
-                NSView contentView = new NSView(nsViewSource.NSView);
+                NSView contentView = new(nsViewSource.NSView);
                 CGSize windowContentSize = contentView.frame.size;
                 width = (uint)windowContentSize.width;
                 height = (uint)windowContentSize.height;
@@ -156,9 +156,7 @@ namespace Veldrid.MTL
         {
             _syncToVerticalBlank = value;
 
-            if (_gd.MetalFeatures.MaxFeatureSet == MTLFeatureSet.macOS_GPUFamily1_v3
-                || _gd.MetalFeatures.MaxFeatureSet == MTLFeatureSet.macOS_GPUFamily1_v4
-                || _gd.MetalFeatures.MaxFeatureSet == MTLFeatureSet.macOS_GPUFamily2_v1)
+            if (_gd.MetalFeatures.MaxFeatureSet is MTLFeatureSet.macOS_GPUFamily1_v3 or MTLFeatureSet.macOS_GPUFamily1_v4 or MTLFeatureSet.macOS_GPUFamily2_v1)
             {
                 _metalLayer.displaySyncEnabled = value;
             }

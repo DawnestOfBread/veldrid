@@ -102,7 +102,7 @@ namespace Veldrid.D3D11
             }
             else
             {
-                VertexStrides = Array.Empty<int>();
+                VertexStrides = [];
             }
         }
 

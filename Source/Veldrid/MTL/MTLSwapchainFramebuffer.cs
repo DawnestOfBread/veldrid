@@ -47,12 +47,12 @@ namespace Veldrid.MTL
                 RecreateDepthTexture(width, height);
                 _depthTarget = new FramebufferAttachment(_depthTexture, 0);
             }
-            OutputAttachmentDescription colorAttachment = new OutputAttachmentDescription(colorFormat);
+            OutputAttachmentDescription colorAttachment = new(colorFormat);
 
             OutputDescription = new OutputDescription(depthAttachment, colorAttachment);
             _placeholderTexture = new MTLPlaceholderTexture(colorFormat);
             _placeholderTexture.Resize(width, height);
-            _colorTargets = new[] { new FramebufferAttachment(_placeholderTexture, 0) };
+            _colorTargets = [new FramebufferAttachment(_placeholderTexture, 0)];
         }
 
         private void RecreateDepthTexture(uint width, uint height)

@@ -15,8 +15,8 @@ namespace Veldrid.VirtualReality.Sample
     internal class AssimpMesh : IDisposable
     {
         private readonly GraphicsDevice _gd;
-        private readonly List<IDisposable> _disposables = new List<IDisposable>();
-        private readonly List<MeshPiece> _meshPieces = new List<MeshPiece>();
+        private readonly List<IDisposable> _disposables = [];
+        private readonly List<MeshPiece> _meshPieces = [];
         private readonly Pipeline _pipeline;
         private readonly DeviceBuffer _wvpBuffer;
         private readonly Texture _texture;
@@ -40,16 +40,16 @@ namespace Veldrid.VirtualReality.Sample
                 new ResourceLayoutElementDescription("InputSampler", ResourceKind.Sampler, ShaderStages.Fragment)));
             _disposables.Add(rl);
 
-            VertexLayoutDescription positionLayoutDesc = new VertexLayoutDescription(
+            VertexLayoutDescription positionLayoutDesc = new(
                 new VertexElementDescription[]
                 {
-                    new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float3),
+                    new("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float3),
                 });
 
-            VertexLayoutDescription texCoordLayoutDesc = new VertexLayoutDescription(
+            VertexLayoutDescription texCoordLayoutDesc = new(
                 new VertexElementDescription[]
                 {
-                    new VertexElementDescription("UV", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2),
+                    new("UV", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2),
                 });
 
             _pipeline = factory.CreateGraphicsPipeline(new GraphicsPipelineDescription(
@@ -57,7 +57,7 @@ namespace Veldrid.VirtualReality.Sample
                 DepthStencilStateDescription.DepthOnlyLessEqual,
                 RasterizerStateDescription.CullNone,
                 PrimitiveTopology.TriangleList,
-                new ShaderSetDescription(new[] { positionLayoutDesc, texCoordLayoutDesc }, new Shader[] { shaders[0], shaders[1] }),
+                new ShaderSetDescription([positionLayoutDesc, texCoordLayoutDesc], [shaders[0], shaders[1]]),
                 rl,
                 outputs));
             _disposables.Add(_pipeline);
@@ -73,7 +73,7 @@ namespace Veldrid.VirtualReality.Sample
             _rs = factory.CreateResourceSet(new ResourceSetDescription(rl, _wvpBuffer, _view, gd.Aniso4xSampler));
             _disposables.Add(_rs);
 
-            AssimpContext ac = new AssimpContext();
+            AssimpContext ac = new();
             Scene scene = ac.ImportFile(meshPath);
 
             foreach (Mesh mesh in scene.Meshes)

@@ -1307,7 +1307,7 @@ namespace Veldrid.Tests
                 srcWidth, srcHeight, srcDepth, srcMipLevels, srcArrayLayers,
                 format, TextureUsage.Staging, srcType));
 
-            TextureDataReaderWriter tdrw = new TextureDataReaderWriter(rBits, gBits, bBits, aBits);
+            TextureDataReaderWriter tdrw = new(rBits, gBits, bBits, aBits);
             byte[] dataArray = tdrw.GetDataArray(srcWidth, srcHeight, srcDepth);
             long rowPitch = srcWidth * tdrw.PixelBytes;
             long depthPitch = rowPitch * srcHeight;
@@ -1371,8 +1371,8 @@ namespace Veldrid.Tests
         {
             foreach (FormatProps props in s_allFormatProps)
             {
-                yield return new object[]
-                {
+                yield return
+                [
                     props.Format, props.RedBits, props.GreenBits, props.BlueBits, props.AlphaBits,
                     TextureType.Texture2D,
                     64, 64, 1, 1, 1,
@@ -1383,7 +1383,7 @@ namespace Veldrid.Tests
                     0, 0,
                     0, 0, 0,
                     0, 0
-                };
+                ];
             }
         }
 
@@ -1467,57 +1467,57 @@ namespace Veldrid.Tests
         }
 
         private static readonly FormatProps[] s_allFormatProps =
-        {
-            new FormatProps(PixelFormat.R8_UNorm, 8, 0, 0, 0),
-            new FormatProps(PixelFormat.R8_SNorm, 8, 0, 0, 0),
-            new FormatProps(PixelFormat.R8_UInt, 8, 0, 0, 0),
-            new FormatProps(PixelFormat.R8_SInt, 8, 0, 0, 0),
+        [
+            new(PixelFormat.R8_UNorm, 8, 0, 0, 0),
+            new(PixelFormat.R8_SNorm, 8, 0, 0, 0),
+            new(PixelFormat.R8_UInt, 8, 0, 0, 0),
+            new(PixelFormat.R8_SInt, 8, 0, 0, 0),
 
-            new FormatProps(PixelFormat.R16_UNorm, 16, 0, 0, 0),
-            new FormatProps(PixelFormat.R16_SNorm, 16, 0, 0, 0),
-            new FormatProps(PixelFormat.R16_UInt, 16, 0, 0, 0),
-            new FormatProps(PixelFormat.R16_SInt, 16, 0, 0, 0),
-            new FormatProps(PixelFormat.R16_Float, 16, 0, 0, 0),
+            new(PixelFormat.R16_UNorm, 16, 0, 0, 0),
+            new(PixelFormat.R16_SNorm, 16, 0, 0, 0),
+            new(PixelFormat.R16_UInt, 16, 0, 0, 0),
+            new(PixelFormat.R16_SInt, 16, 0, 0, 0),
+            new(PixelFormat.R16_Float, 16, 0, 0, 0),
 
-            new FormatProps(PixelFormat.R32_UInt, 32, 0, 0, 0),
-            new FormatProps(PixelFormat.R32_SInt, 32, 0, 0, 0),
-            new FormatProps(PixelFormat.R32_Float, 32, 0, 0, 0),
+            new(PixelFormat.R32_UInt, 32, 0, 0, 0),
+            new(PixelFormat.R32_SInt, 32, 0, 0, 0),
+            new(PixelFormat.R32_Float, 32, 0, 0, 0),
 
-            new FormatProps(PixelFormat.R8_G8_UNorm, 8, 8, 0, 0),
-            new FormatProps(PixelFormat.R8_G8_SNorm, 8, 8, 0, 0),
-            new FormatProps(PixelFormat.R8_G8_UInt, 8, 8, 0, 0),
-            new FormatProps(PixelFormat.R8_G8_SInt, 8, 8, 0, 0),
+            new(PixelFormat.R8_G8_UNorm, 8, 8, 0, 0),
+            new(PixelFormat.R8_G8_SNorm, 8, 8, 0, 0),
+            new(PixelFormat.R8_G8_UInt, 8, 8, 0, 0),
+            new(PixelFormat.R8_G8_SInt, 8, 8, 0, 0),
 
-            new FormatProps(PixelFormat.R16_G16_UNorm, 16, 16, 0, 0),
-            new FormatProps(PixelFormat.R16_G16_SNorm, 16, 16, 0, 0),
-            new FormatProps(PixelFormat.R16_G16_UInt, 16, 16, 0, 0),
-            new FormatProps(PixelFormat.R16_G16_SInt, 16, 16, 0, 0),
-            new FormatProps(PixelFormat.R16_G16_Float, 16, 16, 0, 0),
+            new(PixelFormat.R16_G16_UNorm, 16, 16, 0, 0),
+            new(PixelFormat.R16_G16_SNorm, 16, 16, 0, 0),
+            new(PixelFormat.R16_G16_UInt, 16, 16, 0, 0),
+            new(PixelFormat.R16_G16_SInt, 16, 16, 0, 0),
+            new(PixelFormat.R16_G16_Float, 16, 16, 0, 0),
 
-            new FormatProps(PixelFormat.R32_G32_UInt, 32, 32, 0, 0),
-            new FormatProps(PixelFormat.R32_G32_SInt, 32, 32, 0, 0),
-            new FormatProps(PixelFormat.R32_G32_Float, 32, 32, 0, 0),
+            new(PixelFormat.R32_G32_UInt, 32, 32, 0, 0),
+            new(PixelFormat.R32_G32_SInt, 32, 32, 0, 0),
+            new(PixelFormat.R32_G32_Float, 32, 32, 0, 0),
 
-            new FormatProps(PixelFormat.B8_G8_R8_A8_UNorm, 8, 8, 8, 8),
-            new FormatProps(PixelFormat.R8_G8_B8_A8_UNorm, 8, 8, 8, 8),
-            new FormatProps(PixelFormat.R8_G8_B8_A8_SNorm, 8, 8, 8, 8),
-            new FormatProps(PixelFormat.R8_G8_B8_A8_UInt, 8, 8, 8, 8),
-            new FormatProps(PixelFormat.R8_G8_B8_A8_SInt, 8, 8, 8, 8),
+            new(PixelFormat.B8_G8_R8_A8_UNorm, 8, 8, 8, 8),
+            new(PixelFormat.R8_G8_B8_A8_UNorm, 8, 8, 8, 8),
+            new(PixelFormat.R8_G8_B8_A8_SNorm, 8, 8, 8, 8),
+            new(PixelFormat.R8_G8_B8_A8_UInt, 8, 8, 8, 8),
+            new(PixelFormat.R8_G8_B8_A8_SInt, 8, 8, 8, 8),
 
-            new FormatProps(PixelFormat.R16_G16_B16_A16_UNorm, 16, 16, 16, 16),
-            new FormatProps(PixelFormat.R16_G16_B16_A16_SNorm, 16, 16, 16, 16),
-            new FormatProps(PixelFormat.R16_G16_B16_A16_UInt, 16, 16, 16, 16),
-            new FormatProps(PixelFormat.R16_G16_B16_A16_SInt, 16, 16, 16, 16),
-            new FormatProps(PixelFormat.R16_G16_B16_A16_Float, 16, 16, 16, 16),
+            new(PixelFormat.R16_G16_B16_A16_UNorm, 16, 16, 16, 16),
+            new(PixelFormat.R16_G16_B16_A16_SNorm, 16, 16, 16, 16),
+            new(PixelFormat.R16_G16_B16_A16_UInt, 16, 16, 16, 16),
+            new(PixelFormat.R16_G16_B16_A16_SInt, 16, 16, 16, 16),
+            new(PixelFormat.R16_G16_B16_A16_Float, 16, 16, 16, 16),
 
-            new FormatProps(PixelFormat.R32_G32_B32_A32_UInt, 32, 32, 32, 32),
-            new FormatProps(PixelFormat.R32_G32_B32_A32_SInt, 32, 32, 32, 32),
-            new FormatProps(PixelFormat.R32_G32_B32_A32_Float, 32, 32, 32, 32),
+            new(PixelFormat.R32_G32_B32_A32_UInt, 32, 32, 32, 32),
+            new(PixelFormat.R32_G32_B32_A32_SInt, 32, 32, 32, 32),
+            new(PixelFormat.R32_G32_B32_A32_Float, 32, 32, 32, 32),
 
-            new FormatProps(PixelFormat.R10_G10_B10_A2_UInt, 10, 10, 10, 2),
-            new FormatProps(PixelFormat.R10_G10_B10_A2_UNorm, 10, 10, 10, 2),
-            new FormatProps(PixelFormat.R11_G11_B10_Float, 11, 11, 10, 0)
-        };
+            new(PixelFormat.R10_G10_B10_A2_UInt, 10, 10, 10, 2),
+            new(PixelFormat.R10_G10_B10_A2_UNorm, 10, 10, 10, 2),
+            new(PixelFormat.R11_G11_B10_Float, 11, 11, 10, 0)
+        ];
 
         struct FormatProps
         {

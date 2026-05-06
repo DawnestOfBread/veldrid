@@ -35,7 +35,7 @@ namespace Veldrid.StartupUtilities
             out GraphicsDevice gd)
         {
             Sdl2Native.SDL_Init(SDLInitFlags.Video);
-            if (preferredBackend == GraphicsBackend.OpenGL || preferredBackend == GraphicsBackend.OpenGLES)
+            if (preferredBackend is GraphicsBackend.OpenGL or GraphicsBackend.OpenGLES)
             {
                 SetSDLGLContextAttributes(deviceOptions, preferredBackend);
             }
@@ -55,7 +55,7 @@ namespace Veldrid.StartupUtilities
             {
                 flags |= SDL_WindowFlags.Shown;
             }
-            Sdl2Window window = new Sdl2Window(
+            Sdl2Window window = new(
                 windowCI.WindowTitle,
                 windowCI.X,
                 windowCI.Y,
@@ -173,7 +173,7 @@ namespace Veldrid.StartupUtilities
             bool colorSrgb)
         {
             SwapchainSource source = GetSwapchainSource(window);
-            SwapchainDescription swapchainDesc = new SwapchainDescription(
+            SwapchainDescription swapchainDesc = new(
                 source,
                 (uint)window.Width, (uint)window.Height,
                 options.SwapchainDepthFormat,
@@ -212,7 +212,7 @@ namespace Veldrid.StartupUtilities
             Sdl2Window window,
             bool colorSrgb)
         {
-            SwapchainDescription scDesc = new SwapchainDescription(
+            SwapchainDescription scDesc = new(
                 GetSwapchainSource(window),
                 (uint)window.Width,
                 (uint)window.Height,
@@ -276,7 +276,7 @@ namespace Veldrid.StartupUtilities
 
             result = Sdl2Native.SDL_GL_SetSwapInterval(options.SyncToVerticalBlank ? 1 : 0);
 
-            OpenGL.OpenGLPlatformInfo platformInfo = new OpenGL.OpenGLPlatformInfo(
+            OpenGL.OpenGLPlatformInfo platformInfo = new(
                 contextHandle,
                 Sdl2Native.SDL_GL_GetProcAddress,
                 context => Sdl2Native.SDL_GL_MakeCurrent(sdlHandle, context),
@@ -367,7 +367,7 @@ namespace Veldrid.StartupUtilities
             Sdl2Window window)
         {
             SwapchainSource source = GetSwapchainSource(window);
-            SwapchainDescription swapchainDesc = new SwapchainDescription(
+            SwapchainDescription swapchainDesc = new(
                 source,
                 (uint)window.Width, (uint)window.Height,
                 options.SwapchainDepthFormat,
@@ -390,7 +390,7 @@ namespace Veldrid.StartupUtilities
         }
 
 #if !EXCLUDE_OPENGL_BACKEND
-        private static readonly object s_glVersionLock = new object();
+        private static readonly object s_glVersionLock = new();
         private static (int Major, int Minor)? s_maxSupportedGLVersion;
         private static (int Major, int Minor)? s_maxSupportedGLESVersion;
 
@@ -413,8 +413,8 @@ namespace Veldrid.StartupUtilities
         private static (int Major, int Minor) TestMaxVersion(bool gles)
         {
             (int, int)[] testVersions = gles
-                ? new[] { (3, 2), (3, 0) }
-                : new[] { (4, 6), (4, 3), (4, 0), (3, 3), (3, 0) };
+                ? [(3, 2), (3, 0)]
+                : [(4, 6), (4, 3), (4, 0), (3, 3), (3, 0)];
 
             foreach ((int major, int minor) in testVersions)
             {

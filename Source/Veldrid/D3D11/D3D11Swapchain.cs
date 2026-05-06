@@ -20,8 +20,8 @@ namespace Veldrid.D3D11
         private float _pixelScale = 1f;
         private bool _disposed;
 
-        private readonly object _referencedCLsLock = new object();
-        private HashSet<D3D11CommandList> _referencedCLs = new HashSet<D3D11CommandList>();
+        private readonly object _referencedCLsLock = new();
+        private HashSet<D3D11CommandList> _referencedCLs = [];
 
         public override Framebuffer Framebuffer => _framebuffer;
 
@@ -80,7 +80,7 @@ namespace Veldrid.D3D11
 
             if (description.Source is Win32SwapchainSource win32Source)
             {
-                SwapChainDescription dxgiSCDesc = new SwapChainDescription
+                SwapChainDescription dxgiSCDesc = new()
                 {
                     BufferCount = 2,
                     Windowed = true,
@@ -103,7 +103,7 @@ namespace Veldrid.D3D11
                 _pixelScale = uwpSource.LogicalDpi / 96.0f;
 
                 // Properties of the swap chain
-                SwapChainDescription1 swapChainDescription = new SwapChainDescription1()
+                SwapChainDescription1 swapChainDescription = new()
                 {
                     AlphaMode = AlphaMode.Ignore,
                     BufferCount = 2,
@@ -125,7 +125,7 @@ namespace Veldrid.D3D11
                     }
                 }
 
-                ComObject co = new ComObject(uwpSource.SwapChainPanelNative);
+                ComObject co = new(uwpSource.SwapChainPanelNative);
 
                 ISwapChainPanelNative swapchainPanelNative = co.QueryInterfaceOrNull<ISwapChainPanelNative>();
                 if (swapchainPanelNative != null)
@@ -182,7 +182,7 @@ namespace Veldrid.D3D11
             {
                 if (_depthFormat != null)
                 {
-                    TextureDescription depthDesc = new TextureDescription(
+                    TextureDescription depthDesc = new(
                         actualWidth, actualHeight, 1, 1, 1,
                         _depthFormat.Value,
                         TextureUsage.DepthStencil,
@@ -190,12 +190,12 @@ namespace Veldrid.D3D11
                     _depthTexture = new D3D11Texture(_gd.Device, ref depthDesc);
                 }
 
-                D3D11Texture backBufferVdTexture = new D3D11Texture(
+                D3D11Texture backBufferVdTexture = new(
                     backBufferTexture,
                     TextureType.Texture2D,
                     D3D11Formats.ToVdFormat(_colorFormat));
 
-                FramebufferDescription desc = new FramebufferDescription(_depthTexture, backBufferVdTexture);
+                FramebufferDescription desc = new(_depthTexture, backBufferVdTexture);
                 _framebuffer = new D3D11Framebuffer(_gd.Device, ref desc)
                 {
                     Swapchain = this

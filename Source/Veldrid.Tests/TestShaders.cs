@@ -13,7 +13,7 @@ namespace Veldrid.Tests
                 new ShaderDescription(ShaderStages.Fragment, File.ReadAllBytes(GetPath(setName, ShaderStages.Fragment)), "main"),
                 new CrossCompileOptions(false, false, new SpecializationConstant[]
                 {
-                    new SpecializationConstant(100, false)
+                    new(100, false)
                 }));
         }
 
@@ -23,7 +23,7 @@ namespace Veldrid.Tests
                 new ShaderDescription(ShaderStages.Compute, File.ReadAllBytes(GetPath(setName, ShaderStages.Compute)), "main"),
                 new CrossCompileOptions(false, false, new SpecializationConstant[]
                 {
-                    new SpecializationConstant(100, false)
+                    new(100, false)
                 }));
         }
 

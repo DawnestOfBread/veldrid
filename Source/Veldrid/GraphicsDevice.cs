@@ -11,8 +11,8 @@ namespace Veldrid
     /// </summary>
     public abstract class GraphicsDevice : IDisposable
     {
-        private readonly object _deferredDisposalLock = new object();
-        private readonly List<IDisposable> _disposables = new List<IDisposable>();
+        private readonly object _deferredDisposalLock = new();
+        private readonly List<IDisposable> _disposables = [];
         private Sampler _aniso4xSampler;
 
         internal GraphicsDevice() { }
@@ -306,7 +306,7 @@ namespace Veldrid
                 {
                     throw new VeldridException("Subresource must be 0 for Buffer resources.");
                 }
-                if ((mode == MapMode.Read || mode == MapMode.ReadWrite) && (buffer.Usage & BufferUsage.Staging) == 0)
+                if (mode is MapMode.Read or MapMode.ReadWrite && (buffer.Usage & BufferUsage.Staging) == 0)
                 {
                     throw new VeldridException(
                         $"{nameof(MapMode)}.{nameof(MapMode.Read)} and {nameof(MapMode)}.{nameof(MapMode.ReadWrite)} can only be used on buffers created with {nameof(BufferUsage)}.{nameof(BufferUsage.Staging)}.");
@@ -1051,7 +1051,7 @@ namespace Veldrid
         /// <returns>A new <see cref="GraphicsDevice"/> using the Direct3D 11 API.</returns>
         public static GraphicsDevice CreateD3D11(GraphicsDeviceOptions options, IntPtr hwnd, uint width, uint height)
         {
-            SwapchainDescription swapchainDescription = new SwapchainDescription(
+            SwapchainDescription swapchainDescription = new(
                 SwapchainSource.CreateWin32(hwnd, IntPtr.Zero),
                 width, height,
                 options.SwapchainDepthFormat,
@@ -1079,7 +1079,7 @@ namespace Veldrid
             double renderHeight,
             float logicalDpi)
         {
-            SwapchainDescription swapchainDescription = new SwapchainDescription(
+            SwapchainDescription swapchainDescription = new(
                 SwapchainSource.CreateUwp(swapChainPanel, logicalDpi),
                 (uint)renderWidth,
                 (uint)renderHeight,
@@ -1149,7 +1149,7 @@ namespace Veldrid
         /// <returns>A new <see cref="GraphicsDevice"/> using the Vulkan API.</returns>
         public static GraphicsDevice CreateVulkan(GraphicsDeviceOptions options, Vk.VkSurfaceSource surfaceSource, uint width, uint height)
         {
-            SwapchainDescription scDesc = new SwapchainDescription(
+            SwapchainDescription scDesc = new(
                 surfaceSource.GetSurfaceSource(),
                 width, height,
                 options.SwapchainDepthFormat,
@@ -1226,7 +1226,7 @@ namespace Veldrid
         /// <returns>A new <see cref="GraphicsDevice"/> using the Metal API.</returns>
         public static GraphicsDevice CreateMetal(GraphicsDeviceOptions options, IntPtr nsWindow)
         {
-            SwapchainDescription swapchainDesc = new SwapchainDescription(
+            SwapchainDescription swapchainDesc = new(
                 new NSWindowSwapchainSource(nsWindow),
                 0, 0,
                 options.SwapchainDepthFormat,

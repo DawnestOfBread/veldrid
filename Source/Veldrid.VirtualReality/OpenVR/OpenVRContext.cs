@@ -66,7 +66,7 @@ namespace Veldrid.VirtualReality.OpenVR
         {
             _gd = gd;
 
-            StringBuilder sb = new StringBuilder(512);
+            StringBuilder sb = new(512);
             ETrackedPropertyError error = ETrackedPropertyError.TrackedProp_Success;
             uint ret = _vrSystem.GetStringTrackedDeviceProperty(
                 OVR.k_unTrackedDeviceIndex_Hmd,
@@ -102,7 +102,7 @@ namespace Veldrid.VirtualReality.OpenVR
 
         public override (string[] instance, string[] device) GetRequiredVulkanExtensions()
         {
-            StringBuilder sb = new StringBuilder(1024);
+            StringBuilder sb = new(1024);
             uint ret = _compositor.GetVulkanInstanceExtensionsRequired(sb, 1024);
             string[] instance = sb.ToString().Split(' ');
             sb.Clear();
@@ -113,7 +113,7 @@ namespace Veldrid.VirtualReality.OpenVR
 
         public override HmdPoseState WaitForPoses()
         {
-            EVRCompositorError compositorError = _compositor.WaitGetPoses(_devicePoses, Array.Empty<TrackedDevicePose_t>());
+            EVRCompositorError compositorError = _compositor.WaitGetPoses(_devicePoses, []);
 
             TrackedDevicePose_t hmdPose = _devicePoses[OVR.k_unTrackedDeviceIndex_Hmd];
             Matrix4x4 deviceToAbsolute = ToSysMatrix(hmdPose.mDeviceToAbsoluteTracking);

@@ -18,19 +18,19 @@ namespace Veldrid.NeoDemo
         private GraphicsDevice _gd;
         private Scene _scene;
         private readonly ImGuiRenderable _igRenderable;
-        private readonly SceneContext _sc = new SceneContext();
+        private readonly SceneContext _sc = new();
         private bool _windowResized;
-        private RenderOrderKeyComparer _renderOrderKeyComparer = new RenderOrderKeyComparer();
+        private RenderOrderKeyComparer _renderOrderKeyComparer = new();
         private bool _recreateWindow = true;
 
         private static double _desiredFrameLengthSeconds = 1.0 / 60.0;
         private static bool _limitFrameRate = false;
-        private static FrameTimeAverager _fta = new FrameTimeAverager(0.666);
+        private static FrameTimeAverager _fta = new(0.666);
         private CommandList _frameCommands;
 
         private event Action<int, int> _resizeHandled;
 
-        private readonly string[] _msaaOptions = new string[] { "Off", "2x", "4x", "8x", "16x", "32x" };
+        private readonly string[] _msaaOptions = ["Off", "2x", "4x", "8x", "16x", "32x"];
         private int _msaaOption = 0;
         private bool _colorRedMask = true;
         private bool _colorGreenMask = true;
@@ -39,7 +39,7 @@ namespace Veldrid.NeoDemo
         private TextureSampleCount? _newSampleCount;
         private ColorWriteMask? _newMask;
 
-        private readonly Dictionary<string, ImageSharpTexture> _textures = new Dictionary<string, ImageSharpTexture>();
+        private readonly Dictionary<string, ImageSharpTexture> _textures = new();
         private Sdl2ControllerTracker _controllerTracker;
         private bool _colorSrgb = true;
         private FullScreenQuad _fsq;
@@ -49,7 +49,7 @@ namespace Veldrid.NeoDemo
 
         public NeoDemo()
         {
-            WindowCreateInfo windowCI = new WindowCreateInfo
+            WindowCreateInfo windowCI = new()
             {
                 X = 50,
                 Y = 50,
@@ -58,7 +58,7 @@ namespace Veldrid.NeoDemo
                 WindowInitialState = WindowState.Normal,
                 WindowTitle = "Veldrid NeoDemo"
             };
-            GraphicsDeviceOptions gdOptions = new GraphicsDeviceOptions(false, null, false, ResourceBindingModel.Improved, true, true, _colorSrgb);
+            GraphicsDeviceOptions gdOptions = new(false, null, false, ResourceBindingModel.Improved, true, true, _colorSrgb);
 #if DEBUG
             gdOptions.Debug = true;
 #endif
@@ -94,27 +94,27 @@ namespace Veldrid.NeoDemo
             _sc.Camera.Yaw = -MathF.PI / 2;
             _sc.Camera.Pitch = -MathF.PI / 9;
 
-            ShadowmapDrawer texDrawIndexeder = new ShadowmapDrawer(() => _window, () => _sc.NearShadowMapView);
+            ShadowmapDrawer texDrawIndexeder = new(() => _window, () => _sc.NearShadowMapView);
             _resizeHandled += (w, h) => texDrawIndexeder.OnWindowResized();
             texDrawIndexeder.Position = new Vector2(10, 25);
             _scene.AddRenderable(texDrawIndexeder);
 
-            ShadowmapDrawer texDrawIndexeder2 = new ShadowmapDrawer(() => _window, () => _sc.MidShadowMapView);
+            ShadowmapDrawer texDrawIndexeder2 = new(() => _window, () => _sc.MidShadowMapView);
             _resizeHandled += (w, h) => texDrawIndexeder2.OnWindowResized();
             texDrawIndexeder2.Position = new Vector2(20 + texDrawIndexeder2.Size.X, 25);
             _scene.AddRenderable(texDrawIndexeder2);
 
-            ShadowmapDrawer texDrawIndexeder3 = new ShadowmapDrawer(() => _window, () => _sc.FarShadowMapView);
+            ShadowmapDrawer texDrawIndexeder3 = new(() => _window, () => _sc.FarShadowMapView);
             _resizeHandled += (w, h) => texDrawIndexeder3.OnWindowResized();
             texDrawIndexeder3.Position = new Vector2(30 + (texDrawIndexeder3.Size.X * 2), 25);
             _scene.AddRenderable(texDrawIndexeder3);
 
-            ShadowmapDrawer reflectionTexDrawer = new ShadowmapDrawer(() => _window, () => _sc.ReflectionColorView);
+            ShadowmapDrawer reflectionTexDrawer = new(() => _window, () => _sc.ReflectionColorView);
             _resizeHandled += (w, h) => reflectionTexDrawer.OnWindowResized();
             reflectionTexDrawer.Position = new Vector2(40 + (reflectionTexDrawer.Size.X * 3), 25);
             _scene.AddRenderable(reflectionTexDrawer);
 
-            ScreenDuplicator duplicator = new ScreenDuplicator();
+            ScreenDuplicator duplicator = new();
             _scene.AddRenderable(duplicator);
 
             _fsq = new FullScreenQuad();
@@ -126,7 +126,7 @@ namespace Veldrid.NeoDemo
 
         private void AddSponzaAtriumObjects()
         {
-            ObjParser parser = new ObjParser();
+            ObjParser parser = new();
             using (FileStream objStream = File.OpenRead(AssetHelper.GetPath("Models/SponzaAtrium/sponza.obj")))
             {
                 ObjFile atriumFile = parser.Parse(objStream);
@@ -138,7 +138,7 @@ namespace Veldrid.NeoDemo
 
                 foreach (ObjFile.MeshGroup group in atriumFile.MeshGroups)
                 {
-                    Vector3 scale = new Vector3(0.1f);
+                    Vector3 scale = new(0.1f);
                     ConstructedMeshInfo mesh = atriumFile.GetMesh(group);
                     MaterialDefinition materialDef = atriumMtls.Definitions[mesh.MaterialName];
                     ImageSharpTexture overrideTextureData = null;
@@ -201,7 +201,7 @@ namespace Veldrid.NeoDemo
             Vector3 scale,
             string name)
         {
-            TexturedMesh mesh = new TexturedMesh(name, meshData, texData, alphaTexData, materialProps ?? CommonMaterials.Brick);
+            TexturedMesh mesh = new(name, meshData, texData, alphaTexData, materialProps ?? CommonMaterials.Brick);
             mesh.Transform.Position = position;
             mesh.Transform.Rotation = rotation;
             mesh.Transform.Scale = scale;
@@ -211,7 +211,7 @@ namespace Veldrid.NeoDemo
         public void Run()
         {
             long previousFrameTicks = 0;
-            Stopwatch sw = new Stopwatch();
+            Stopwatch sw = new();
             sw.Start();
             while (_window.Exists)
             {
@@ -642,7 +642,7 @@ namespace Veldrid.NeoDemo
             if (_recreateWindow || forceRecreateWindow)
             {
 
-                WindowCreateInfo windowCI = new WindowCreateInfo
+                WindowCreateInfo windowCI = new()
                 {
                     X = _window.X,
                     Y = _window.Y,
@@ -658,7 +658,7 @@ namespace Veldrid.NeoDemo
                 _window.Resized += () => _windowResized = true;
             }
 
-            GraphicsDeviceOptions gdOptions = new GraphicsDeviceOptions(false, null, syncToVBlank, ResourceBindingModel.Improved, true, true, _colorSrgb);
+            GraphicsDeviceOptions gdOptions = new(false, null, syncToVBlank, ResourceBindingModel.Improved, true, true, _colorSrgb);
 #if DEBUG
             gdOptions.Debug = true;
 #endif

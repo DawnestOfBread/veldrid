@@ -25,9 +25,7 @@ namespace Veldrid
             for (int i = 0; i < description.Layout.Description.Elements.Length; i++)
             {
                 ResourceLayoutElementDescription element = description.Layout.Description.Elements[i];
-                if (element.Kind == ResourceKind.UniformBuffer
-                    || element.Kind == ResourceKind.StructuredBufferReadOnly
-                    || element.Kind == ResourceKind.StructuredBufferReadWrite)
+                if (element.Kind is ResourceKind.UniformBuffer or ResourceKind.StructuredBufferReadOnly or ResourceKind.StructuredBufferReadWrite)
                 {
                     DeviceBufferRange range = Util.GetBufferRange(description.BoundResources[i], 0);
 

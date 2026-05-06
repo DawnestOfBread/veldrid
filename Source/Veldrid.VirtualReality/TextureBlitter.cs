@@ -25,11 +25,11 @@ namespace Veldrid.VirtualReality
         {
             _gd = gd;
 
-            SpecializationConstant[] specConstants = new[]
-            {
-                new SpecializationConstant(0, srgbOutput),
-                new SpecializationConstant(1, gd.BackendType == GraphicsBackend.OpenGL || gd.BackendType == GraphicsBackend.OpenGLES)
-            };
+            SpecializationConstant[] specConstants =
+            [
+                new(0, srgbOutput),
+                new(1, gd.BackendType is GraphicsBackend.OpenGL or GraphicsBackend.OpenGLES)
+            ];
 
             Shader[] shaders = factory.CreateFromSpirv(
                 new ShaderDescription(ShaderStages.Vertex, Encoding.ASCII.GetBytes(vertexGlsl), "main"),
@@ -49,10 +49,10 @@ namespace Veldrid.VirtualReality
                 RasterizerStateDescription.CullNone,
                 PrimitiveTopology.TriangleStrip,
                 new ShaderSetDescription(
-                    Array.Empty<VertexLayoutDescription>(),
-                    new[] { shaders[0], shaders[1] },
+                    [],
+                    [shaders[0], shaders[1]],
                     specConstants),
-                new[] { _rl, _sampleRegionLayout },
+                [_rl, _sampleRegionLayout],
                 outputDesc));
 
             _sampleRegionUB = factory.CreateBuffer(new BufferDescription(16, BufferUsage.UniformBuffer));
@@ -64,7 +64,7 @@ namespace Veldrid.VirtualReality
 
         public void Render(CommandList cl, ResourceSet rs, Vector2 minUV, Vector2 maxUV)
         {
-            Vector4 newVal = new Vector4(minUV.X, minUV.Y, maxUV.X, maxUV.Y);
+            Vector4 newVal = new(minUV.X, minUV.Y, maxUV.X, maxUV.Y);
             if (_lastMinMaxUV != newVal)
             {
                 _lastMinMaxUV = newVal;
@@ -93,7 +93,7 @@ namespace Veldrid.VirtualReality
 
 layout (location = 0) out vec2 fsin_UV;
 
-const vec4 QuadInfos[4] = 
+const vec4 QuadInfos[4] =
 {
     vec4(-1, 1, 0, 0),
     vec4(1, 1, 1, 0),

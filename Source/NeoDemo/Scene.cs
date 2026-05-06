@@ -14,16 +14,15 @@ namespace Veldrid.NeoDemo
 {
     public class Scene
     {
-        private readonly Octree<CullRenderable> _octree
-            = new Octree<CullRenderable>(new BoundingBox(Vector3.One * -50, Vector3.One * 50), 2);
+        private readonly Octree<CullRenderable> _octree = new(new BoundingBox(Vector3.One * -50, Vector3.One * 50), 2);
 
-        private readonly List<Renderable> _freeRenderables = new List<Renderable>();
-        private readonly List<IUpdateable> _updateables = new List<IUpdateable>();
+        private readonly List<Renderable> _freeRenderables = [];
+        private readonly List<IUpdateable> _updateables = [];
 
         private readonly ConcurrentDictionary<RenderPasses, Func<CullRenderable, bool>> _filters
-            = new ConcurrentDictionary<RenderPasses, Func<CullRenderable, bool>>(new RenderPassesComparer());
+            = new(new RenderPassesComparer());
 
-        internal MirrorMesh MirrorMesh { get; set; } = new MirrorMesh();
+        internal MirrorMesh MirrorMesh { get; set; } = new();
 
         private readonly Camera _camera;
 
@@ -168,7 +167,7 @@ namespace Veldrid.NeoDemo
 
             // Render reflected scene.
             Matrix4x4 planeReflectionMatrix = Matrix4x4.CreateReflection(MirrorMesh.Plane);
-            CameraInfo camInfo = new CameraInfo();
+            CameraInfo camInfo = new();
             camInfo.CameraLookDirection = Vector3.Normalize(Vector3.Reflect(_camera.LookDirection, MirrorMesh.Plane.Normal));
             camInfo.CameraPosition_WorldSpace = Vector3.Transform(_camera.Position, planeReflectionMatrix);
             cl.UpdateBuffer(sc.CameraInfoBuffer, 0, ref camInfo);
@@ -180,7 +179,7 @@ namespace Veldrid.NeoDemo
             Matrix4x4 projection = _camera.ProjectionMatrix;
             cl.UpdateBuffer(sc.ReflectionViewProjBuffer, 0, view * projection);
 
-            BoundingFrustum cameraFrustum = new BoundingFrustum(view * projection);
+            BoundingFrustum cameraFrustum = new(view * projection);
             Render(gd, cl, sc, RenderPasses.ReflectionMap, cameraFrustum, _camera.Position, _renderQueues[0], _cullableStage[0], _renderableStage[0], null, false);
 
             cl.GenerateMipmaps(sc.ReflectionColorTexture);
@@ -335,7 +334,7 @@ namespace Veldrid.NeoDemo
 
                 // Render reflected scene.
                 Matrix4x4 planeReflectionMatrix = Matrix4x4.CreateReflection(MirrorMesh.Plane);
-                CameraInfo camInfo = new CameraInfo();
+                CameraInfo camInfo = new();
                 camInfo.CameraLookDirection = Vector3.Normalize(Vector3.Reflect(_camera.LookDirection, MirrorMesh.Plane.Normal));
                 camInfo.CameraPosition_WorldSpace = Vector3.Transform(_camera.Position, planeReflectionMatrix);
                 cls[4].UpdateBuffer(sc.CameraInfoBuffer, 0, ref camInfo);
@@ -347,7 +346,7 @@ namespace Veldrid.NeoDemo
                 Matrix4x4 projection = _camera.ProjectionMatrix;
                 cls[4].UpdateBuffer(sc.ReflectionViewProjBuffer, 0, view * projection);
 
-                BoundingFrustum cameraFrustum = new BoundingFrustum(view * projection);
+                BoundingFrustum cameraFrustum = new(view * projection);
                 Render(gd, cls[4], sc, RenderPasses.ReflectionMap, cameraFrustum, _camera.Position, _renderQueues[3], _cullableStage[3], _renderableStage[3], null, true);
 
                 cl.GenerateMipmaps(sc.ReflectionColorTexture);
@@ -543,7 +542,7 @@ namespace Veldrid.NeoDemo
             }
         }
 
-        private readonly HashSet<Renderable> _allPerFrameRenderablesSet = new HashSet<Renderable>();
+        private readonly HashSet<Renderable> _allPerFrameRenderablesSet = [];
         private readonly RenderQueue[] _renderQueues = Enumerable.Range(0, 4).Select(i => new RenderQueue()).ToArray();
         private readonly List<CullRenderable>[] _cullableStage = Enumerable.Range(0, 4).Select(i => new List<CullRenderable>()).ToArray();
         private readonly List<Renderable>[] _renderableStage = Enumerable.Range(0, 4).Select(i => new List<Renderable>()).ToArray();

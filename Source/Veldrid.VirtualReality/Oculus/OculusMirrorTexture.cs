@@ -8,11 +8,10 @@ namespace Veldrid.VirtualReality.Oculus
 {
     internal class OculusMirrorTexture : IDisposable
     {
-        public static readonly Guid s_d3d11Tex2DGuid = new Guid("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
+        public static readonly Guid s_d3d11Tex2DGuid = new("6f15aaf2-d208-4e89-9ab4-489535d34f9c");
 
         private readonly OculusContext _context;
-        private readonly Dictionary<OutputDescription, TextureBlitter> _blitters
-            = new Dictionary<OutputDescription, TextureBlitter>();
+        private readonly Dictionary<OutputDescription, TextureBlitter> _blitters = new();
 
         private (uint width, uint height, MirrorTextureEyeSource source) _texProperties;
         private ovrMirrorTexture _ovrMirrorTex;

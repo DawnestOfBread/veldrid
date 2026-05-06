@@ -11,12 +11,8 @@
     <Compile Include="..\Veldrid\Vk\VkFormats.VdToVkPixelFormat.cs" Link="VkFormats.VdToVkPixelFormat.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Veldrid.SPIRV" Version="$(VeldridSpirvVersion)" />
-  </ItemGroup>
-
   <ItemGroup Condition="'$(UseStableVersions)' == 'true'" >
-    <PackageReference Include="Veldrid" Version="4.5.0" />
+    <PackageReference Include="DawnestOfBread.Veldrid" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseStableVersions)' != 'true'" >
@@ -30,6 +26,11 @@
       <PackagePath>runtimes/win-x64/native</PackagePath>
       <Pack>true</Pack>
     </Content>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="DawnestOfBread.Veldrid.SPIRV" Version="1.0.16" />
   </ItemGroup>
 
   <PropertyGroup>

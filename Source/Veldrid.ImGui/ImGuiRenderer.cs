@@ -36,12 +36,10 @@ namespace Veldrid
         private Vector2 _scaleFactor = Vector2.One;
 
         // Image trackers
-        private readonly Dictionary<TextureView, ResourceSetInfo> _setsByView
-            = new Dictionary<TextureView, ResourceSetInfo>();
-        private readonly Dictionary<Texture, TextureView> _autoViewsByTexture
-            = new Dictionary<Texture, TextureView>();
-        private readonly Dictionary<IntPtr, ResourceSetInfo> _viewsById = new Dictionary<IntPtr, ResourceSetInfo>();
-        private readonly List<IDisposable> _ownedResources = new List<IDisposable>();
+        private readonly Dictionary<TextureView, ResourceSetInfo> _setsByView = new();
+        private readonly Dictionary<Texture, TextureView> _autoViewsByTexture = new();
+        private readonly Dictionary<IntPtr, ResourceSetInfo> _viewsById = new();
+        private readonly List<IDisposable> _ownedResources = [];
         private int _lastAssignedID = 100;
         private bool _frameBegun;
 
@@ -118,13 +116,13 @@ namespace Veldrid
             _fragmentShader = factory.CreateShader(new ShaderDescription(ShaderStages.Fragment, fragmentShaderBytes, _gd.BackendType == GraphicsBackend.Vulkan ? "main" : "FS"));
             _fragmentShader.Name = "ImGui.NET Fragment Shader";
 
-            VertexLayoutDescription[] vertexLayouts = new VertexLayoutDescription[]
-            {
-                new VertexLayoutDescription(
+            VertexLayoutDescription[] vertexLayouts =
+            [
+                new(
                     new VertexElementDescription("in_position", VertexElementSemantic.Position, VertexElementFormat.Float2),
                     new VertexElementDescription("in_texCoord", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2),
                     new VertexElementDescription("in_color", VertexElementSemantic.Color, VertexElementFormat.Byte4_Norm))
-            };
+            ];
 
             _layout = factory.CreateResourceLayout(new ResourceLayoutDescription(
                 new ResourceLayoutElementDescription("ProjectionMatrixBuffer", ResourceKind.UniformBuffer, ShaderStages.Vertex),
@@ -134,20 +132,19 @@ namespace Veldrid
                 new ResourceLayoutElementDescription("MainTexture", ResourceKind.TextureReadOnly, ShaderStages.Fragment)));
             _textureLayout.Name = "ImGui.NET Texture Layout";
 
-            GraphicsPipelineDescription pd = new GraphicsPipelineDescription(
+            GraphicsPipelineDescription pd = new(
                 BlendStateDescription.SingleAlphaBlend,
                 new DepthStencilStateDescription(false, false, ComparisonKind.Always),
                 new RasterizerStateDescription(FaceCullMode.None, PolygonFillMode.Solid, FrontFace.Clockwise, true, true),
                 PrimitiveTopology.TriangleList,
                 new ShaderSetDescription(
                     vertexLayouts,
-                    new[] { _vertexShader, _fragmentShader },
-                    new[]
-                    {
+                    [_vertexShader, _fragmentShader],
+                    [
                         new SpecializationConstant(0, gd.IsClipSpaceYInverted),
-                        new SpecializationConstant(1, _colorSpaceHandling == ColorSpaceHandling.Legacy),
-                    }),
-                new ResourceLayout[] { _layout, _textureLayout },
+                        new SpecializationConstant(1, _colorSpaceHandling == ColorSpaceHandling.Legacy)
+                    ]),
+                [_layout, _textureLayout],
                 outputDescription,
                 ResourceBindingModel.Default);
             _pipeline = factory.CreateGraphicsPipeline(ref pd);
@@ -296,7 +293,7 @@ namespace Veldrid
 
         private string GetEmbeddedResourceText(string resourceName)
         {
-            using (StreamReader sr = new StreamReader(_assembly.GetManifestResourceStream(resourceName)))
+            using (StreamReader sr = new(_assembly.GetManifestResourceStream(resourceName)))
             {
                 return sr.ReadToEnd();
             }

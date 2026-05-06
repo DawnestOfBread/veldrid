@@ -17,7 +17,7 @@ namespace Veldrid.NeoDemo.Objects
         private readonly MeshData _meshData;
         private readonly ImageSharpTexture _textureData;
         private readonly ImageSharpTexture _alphaTextureData;
-        private readonly Transform _transform = new Transform();
+        private readonly Transform _transform = new();
 
         private BoundingBox _centeredBounds;
         private DeviceBuffer _vb;
@@ -39,7 +39,7 @@ namespace Veldrid.NeoDemo.Objects
 
         private DeviceBuffer _worldAndInverseBuffer;
 
-        private readonly DisposeCollector _disposeCollector = new DisposeCollector();
+        private readonly DisposeCollector _disposeCollector = new();
 
         private readonly MaterialPropsAndBuffer _materialProps;
         private readonly Vector3 _objectCenter;
@@ -104,13 +104,13 @@ namespace Veldrid.NeoDemo.Objects
             }
             _alphaMapView = StaticResourceCache.GetTextureView(gd.ResourceFactory, _alphamapTexture);
 
-            VertexLayoutDescription[] shadowDepthVertexLayouts = new VertexLayoutDescription[]
-            {
-                new VertexLayoutDescription(
+            VertexLayoutDescription[] shadowDepthVertexLayouts =
+            [
+                new(
                     new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float3),
                     new VertexElementDescription("Normal", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float3),
                     new VertexElementDescription("TexCoord", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2))
-            };
+            ];
 
             (Shader depthVS, Shader depthFS) = StaticResourceCache.GetShaders(gd, gd.ResourceFactory, "ShadowDepth");
 
@@ -122,28 +122,28 @@ namespace Veldrid.NeoDemo.Objects
             ResourceLayout worldLayout = StaticResourceCache.GetResourceLayout(gd.ResourceFactory, new ResourceLayoutDescription(
                 new ResourceLayoutElementDescription("WorldAndInverse", ResourceKind.UniformBuffer, ShaderStages.Vertex, ResourceLayoutElementOptions.DynamicBinding)));
 
-            GraphicsPipelineDescription depthPD = new GraphicsPipelineDescription(
+            GraphicsPipelineDescription depthPD = new(
                 BlendStateDescription.Empty,
                 gd.IsDepthRangeZeroToOne ? DepthStencilStateDescription.DepthOnlyGreaterEqual : DepthStencilStateDescription.DepthOnlyLessEqual,
                 RasterizerStateDescription.Default,
                 PrimitiveTopology.TriangleList,
                 new ShaderSetDescription(
                     shadowDepthVertexLayouts,
-                    new[] { depthVS, depthFS },
-                    new[] { new SpecializationConstant(100, gd.IsClipSpaceYInverted) }),
-                new ResourceLayout[] { projViewCombinedLayout, worldLayout },
+                    [depthVS, depthFS],
+                    [new SpecializationConstant(100, gd.IsClipSpaceYInverted)]),
+                [projViewCombinedLayout, worldLayout],
                 sc.NearShadowMapFramebuffer.OutputDescription);
             _shadowMapPipeline = StaticResourceCache.GetPipeline(gd.ResourceFactory, ref depthPD);
 
             _shadowMapResourceSets = CreateShadowMapResourceSets(gd.ResourceFactory, disposeFactory, cl, sc, projViewCombinedLayout, worldLayout);
 
-            VertexLayoutDescription[] mainVertexLayouts = new VertexLayoutDescription[]
-            {
-                new VertexLayoutDescription(
+            VertexLayoutDescription[] mainVertexLayouts =
+            [
+                new(
                     new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float3),
                     new VertexElementDescription("Normal", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float3),
                     new VertexElementDescription("TexCoord", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2))
-            };
+            ];
 
             (Shader mainVS, Shader mainFS) = StaticResourceCache.GetShaders(gd, gd.ResourceFactory, "ShadowMain");
 
@@ -181,13 +181,14 @@ namespace Veldrid.NeoDemo.Objects
             BlendStateDescription alphaBlendDesc = BlendStateDescription.SingleAlphaBlend;
             alphaBlendDesc.AlphaToCoverageEnabled = true;
 
-            GraphicsPipelineDescription mainPD = new GraphicsPipelineDescription(
+            GraphicsPipelineDescription mainPD = new(
                 _alphamapTexture != null ? alphaBlendDesc : BlendStateDescription.SingleOverrideBlend,
                 gd.IsDepthRangeZeroToOne ? DepthStencilStateDescription.DepthOnlyGreaterEqual : DepthStencilStateDescription.DepthOnlyLessEqual,
                 RasterizerStateDescription.Default,
                 PrimitiveTopology.TriangleList,
-                new ShaderSetDescription(mainVertexLayouts, new[] { mainVS, mainFS }, new[] { new SpecializationConstant(100, gd.IsClipSpaceYInverted) }),
-                new ResourceLayout[] { projViewLayout, mainSharedLayout, mainPerObjectLayout, reflectionLayout },
+                new ShaderSetDescription(mainVertexLayouts, [mainVS, mainFS], [new SpecializationConstant(100, gd.IsClipSpaceYInverted)
+                ]),
+                [projViewLayout, mainSharedLayout, mainPerObjectLayout, reflectionLayout],
                 sc.MainSceneFramebuffer.OutputDescription);
             _pipeline = StaticResourceCache.GetPipeline(gd.ResourceFactory, ref mainPD);
             _pipeline.Name = "TexturedMesh Main Pipeline";
@@ -302,7 +303,7 @@ namespace Veldrid.NeoDemo.Objects
                 int shadowMapIndex = renderPass == RenderPasses.ShadowMapNear ? 0 : renderPass == RenderPasses.ShadowMapMid ? 1 : 2;
                 RenderShadowMap(cl, sc, shadowMapIndex);
             }
-            else if (renderPass == RenderPasses.Standard || renderPass == RenderPasses.AlphaBlend)
+            else if (renderPass is RenderPasses.Standard or RenderPasses.AlphaBlend)
             {
                 RenderStandard(cl, sc, false);
             }

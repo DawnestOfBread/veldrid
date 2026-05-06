@@ -75,7 +75,7 @@ namespace Veldrid.OpenGL
             _gd = gd;
             IsComputePipeline = true;
             ComputeShader = description.ComputeShader;
-            VertexStrides = Array.Empty<int>();
+            VertexStrides = [];
 #if !VALIDATE_USAGE
             ResourceLayouts = Util.ShallowClone(description.ResourceLayouts);
 #endif
@@ -207,12 +207,12 @@ namespace Veldrid.OpenGL
                 OpenGLResourceLayout glSetLayout = Util.AssertSubtype<ResourceLayout, OpenGLResourceLayout>(setLayout);
                 ResourceLayoutElementDescription[] resources = glSetLayout.Elements;
 
-                Dictionary<uint, OpenGLUniformBinding> uniformBindings = new Dictionary<uint, OpenGLUniformBinding>();
-                Dictionary<uint, OpenGLTextureBindingSlotInfo> textureBindings = new Dictionary<uint, OpenGLTextureBindingSlotInfo>();
-                Dictionary<uint, OpenGLSamplerBindingSlotInfo> samplerBindings = new Dictionary<uint, OpenGLSamplerBindingSlotInfo>();
-                Dictionary<uint, OpenGLShaderStorageBinding> storageBufferBindings = new Dictionary<uint, OpenGLShaderStorageBinding>();
+                Dictionary<uint, OpenGLUniformBinding> uniformBindings = new();
+                Dictionary<uint, OpenGLTextureBindingSlotInfo> textureBindings = new();
+                Dictionary<uint, OpenGLSamplerBindingSlotInfo> samplerBindings = new();
+                Dictionary<uint, OpenGLShaderStorageBinding> storageBufferBindings = new();
 
-                List<int> samplerTrackedRelativeTextureIndices = new List<int>();
+                List<int> samplerTrackedRelativeTextureIndices = [];
                 for (uint i = 0; i < resources.Length; i++)
                 {
                     ResourceLayoutElementDescription resource = resources[i];
@@ -241,8 +241,7 @@ namespace Veldrid.OpenGL
                         relativeImageIndex += 1;
                         textureBindings[i] = new OpenGLTextureBindingSlotInfo() { RelativeIndex = relativeImageIndex, UniformLocation = location };
                     }
-                    else if (resource.Kind == ResourceKind.StructuredBufferReadOnly
-                        || resource.Kind == ResourceKind.StructuredBufferReadWrite)
+                    else if (resource.Kind is ResourceKind.StructuredBufferReadOnly or ResourceKind.StructuredBufferReadWrite)
                     {
                         uint storageBlockBinding;
                         if (_gd.BackendType == GraphicsBackend.OpenGL)

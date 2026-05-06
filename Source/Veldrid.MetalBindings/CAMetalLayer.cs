@@ -69,7 +69,7 @@ namespace Veldrid.MetalBindings
             set => objc_msgSend(NativePtr, "setDisplaySyncEnabled:", value);
         }
 
-        private static readonly ObjCClass s_class = new ObjCClass(nameof(CAMetalLayer));
+        private static readonly ObjCClass s_class = new(nameof(CAMetalLayer));
         private static readonly Selector sel_device = "device";
         private static readonly Selector sel_setDevice = "setDevice:";
         private static readonly Selector sel_pixelFormat = "pixelFormat";

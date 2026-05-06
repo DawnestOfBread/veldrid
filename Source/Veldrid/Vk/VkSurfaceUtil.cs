@@ -142,13 +142,13 @@ namespace Veldrid.Vk
 
         private static unsafe VkSurfaceKHR CreateNSWindowSurface(VkGraphicsDevice gd, VkInstance instance, NSWindowSwapchainSource nsWindowSource, bool hasExtMetalSurface)
         {
-            NSWindow nswindow = new NSWindow(nsWindowSource.NSWindow);
+            NSWindow nswindow = new(nsWindowSource.NSWindow);
             return CreateNSViewSurface(gd, instance, new NSViewSwapchainSource(nswindow.contentView), hasExtMetalSurface);
         }
 
         private static unsafe VkSurfaceKHR CreateNSViewSurface(VkGraphicsDevice gd, VkInstance instance, NSViewSwapchainSource nsViewSource, bool hasExtMetalSurface)
         {
-            NSView contentView = new NSView(nsViewSource.NSView);
+            NSView contentView = new(nsViewSource.NSView);
 
             if (!CAMetalLayer.TryCast(contentView.layer, out var metalLayer))
             {
@@ -159,7 +159,7 @@ namespace Veldrid.Vk
 
             if (hasExtMetalSurface)
             {
-                VkMetalSurfaceCreateInfoEXT surfaceCI = new VkMetalSurfaceCreateInfoEXT();
+                VkMetalSurfaceCreateInfoEXT surfaceCI = new();
                 surfaceCI.sType = VkMetalSurfaceCreateInfoEXT.VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT;
                 surfaceCI.pLayer = metalLayer.NativePtr.ToPointer();
                 VkSurfaceKHR surface;
@@ -179,7 +179,7 @@ namespace Veldrid.Vk
 
         private static VkSurfaceKHR CreateUIViewSurface(VkGraphicsDevice gd, VkInstance instance, UIViewSwapchainSource uiViewSource, bool hasExtMetalSurface)
         {
-            UIView uiView = new UIView(uiViewSource.UIView);
+            UIView uiView = new(uiViewSource.UIView);
 
             if (!CAMetalLayer.TryCast(uiView.layer, out var metalLayer))
             {
@@ -191,7 +191,7 @@ namespace Veldrid.Vk
 
             if (hasExtMetalSurface)
             {
-                VkMetalSurfaceCreateInfoEXT surfaceCI = new VkMetalSurfaceCreateInfoEXT();
+                VkMetalSurfaceCreateInfoEXT surfaceCI = new();
                 surfaceCI.sType = VkMetalSurfaceCreateInfoEXT.VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT;
                 surfaceCI.pLayer = metalLayer.NativePtr.ToPointer();
                 VkSurfaceKHR surface;

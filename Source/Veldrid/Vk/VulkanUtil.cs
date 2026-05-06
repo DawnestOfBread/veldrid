@@ -7,8 +7,8 @@ namespace Veldrid.Vk
 {
     internal unsafe static class VulkanUtil
     {
-        private static Lazy<bool> s_isVulkanLoaded = new Lazy<bool>(TryLoadVulkan);
-        private static readonly Lazy<string[]> s_instanceExtensions = new Lazy<string[]>(EnumerateInstanceExtensions);
+        private static Lazy<bool> s_isVulkanLoaded = new(TryLoadVulkan);
+        private static readonly Lazy<string[]> s_instanceExtensions = new(EnumerateInstanceExtensions);
 
         [Conditional("DEBUG")]
         public static void CheckResult(VkResult result)
@@ -43,7 +43,7 @@ namespace Veldrid.Vk
             CheckResult(result);
             if (propCount == 0)
             {
-                return Array.Empty<string>();
+                return [];
             }
 
             VkLayerProperties[] props = new VkLayerProperties[propCount];
@@ -67,19 +67,19 @@ namespace Veldrid.Vk
         {
             if (!IsVulkanLoaded())
             {
-                return Array.Empty<string>();
+                return [];
             }
 
             uint propCount = 0;
             VkResult result = vkEnumerateInstanceExtensionProperties((byte*)null, ref propCount, null);
             if (result != VkResult.Success)
             {
-                return Array.Empty<string>();
+                return [];
             }
 
             if (propCount == 0)
             {
-                return Array.Empty<string>();
+                return [];
             }
 
             VkExtensionProperties[] props = new VkExtensionProperties[propCount];
@@ -136,7 +136,7 @@ namespace Veldrid.Vk
             VkPipelineStageFlags srcStageFlags = VkPipelineStageFlags.None;
             VkPipelineStageFlags dstStageFlags = VkPipelineStageFlags.None;
 
-            if ((oldLayout == VkImageLayout.Undefined || oldLayout == VkImageLayout.Preinitialized) && newLayout == VkImageLayout.TransferDstOptimal)
+            if (oldLayout is VkImageLayout.Undefined or VkImageLayout.Preinitialized && newLayout == VkImageLayout.TransferDstOptimal)
             {
                 barrier.srcAccessMask = VkAccessFlags.None;
                 barrier.dstAccessMask = VkAccessFlags.TransferWrite;

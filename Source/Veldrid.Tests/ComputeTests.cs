@@ -106,7 +106,7 @@ void main()
             // Read back from our texture and make sure it has been properly filled.
             for (uint depth = 0; depth < computeTargetTexture.Depth; depth++)
             {
-                RgbaFloat expectedFillValue = new RgbaFloat(new System.Numerics.Vector4(FillValue * (depth + 1)));
+                RgbaFloat expectedFillValue = new(new System.Numerics.Vector4(FillValue * (depth + 1)));
                 int notFilledCount = CountTexelsNotFilledAtDepth(GD, computeTargetTexture, expectedFillValue, depth);
 
                 Assert.Equal(0, notFilledCount);
@@ -123,7 +123,7 @@ void main()
             ResourceFactory factory = device.ResourceFactory;
 
             // We need to create a staging texture and copy into it.
-            TextureDescription description = new TextureDescription(texture.Width, texture.Height, depth: 1,
+            TextureDescription description = new(texture.Width, texture.Height, depth: 1,
                 texture.MipLevels, texture.ArrayLayers,
                 texture.Format, TextureUsage.Staging,
                 texture.Type, texture.SampleCount);
@@ -258,14 +258,15 @@ void main()
                 TextureUsage.Sampled | TextureUsage.Storage | TextureUsage.Cubemap);
             Texture computeOutput = RF.CreateTexture(texDesc);
 
-            Vector4[] faceColors = new Vector4[] {
-                new Vector4(0 * 42),
-                new Vector4(1 * 42),
-                new Vector4(2 * 42),
-                new Vector4(3 * 42),
-                new Vector4(4 * 42),
-                new Vector4(5 * 42)
-            };
+            Vector4[] faceColors =
+            [
+                new(0 * 42),
+                new(1 * 42),
+                new(2 * 42),
+                new(3 * 42),
+                new(4 * 42),
+                new(5 * 42)
+            ];
 
             ResourceLayout computeLayout = RF.CreateResourceLayout(new ResourceLayoutDescription(
                 new ResourceLayoutElementDescription("ComputeOutput", ResourceKind.TextureReadWrite, ShaderStages.Compute)));
@@ -327,14 +328,15 @@ void main()
 
             TextureView computeOutputMipLevel = RF.CreateTextureView(new TextureViewDescription(computeOutput, BoundMipLevel, 1, 0, 1));
 
-            Vector4[] faceColors = new Vector4[] {
-                new Vector4(0 * 42),
-                new Vector4(1 * 42),
-                new Vector4(2 * 42),
-                new Vector4(3 * 42),
-                new Vector4(4 * 42),
-                new Vector4(5 * 42)
-            };
+            Vector4[] faceColors =
+            [
+                new(0 * 42),
+                new(1 * 42),
+                new(2 * 42),
+                new(3 * 42),
+                new(4 * 42),
+                new(5 * 42)
+            ];
 
             ResourceLayout computeLayout = RF.CreateResourceLayout(new ResourceLayoutDescription(
                 new ResourceLayoutElementDescription("ComputeOutput", ResourceKind.TextureReadWrite, ShaderStages.Compute)));
@@ -417,13 +419,13 @@ void main()
             ResourceLayout[] layouts;
             ResourceSet[] sets;
 
-            DeviceBufferRange srcRange = new DeviceBufferRange(copySrc, srcSetMultiple * GD.StructuredBufferMinOffsetAlignment, dataSize);
-            DeviceBufferRange dstRange = new DeviceBufferRange(copyDst, dstSetMultiple * GD.StructuredBufferMinOffsetAlignment, dataSize);
+            DeviceBufferRange srcRange = new(copySrc, srcSetMultiple * GD.StructuredBufferMinOffsetAlignment, dataSize);
+            DeviceBufferRange dstRange = new(copyDst, dstSetMultiple * GD.StructuredBufferMinOffsetAlignment, dataSize);
 
             if (combinedLayout)
             {
-                layouts = new[]
-                {
+                layouts =
+                [
                     RF.CreateResourceLayout(new ResourceLayoutDescription(
                         new ResourceLayoutElementDescription(
                             "CopySrc",
@@ -435,16 +437,16 @@ void main()
                             ResourceKind.StructuredBufferReadWrite,
                             ShaderStages.Compute,
                             ResourceLayoutElementOptions.DynamicBinding)))
-                };
-                sets = new[]
-                {
+                ];
+                sets =
+                [
                     RF.CreateResourceSet(new ResourceSetDescription(layouts[0], srcRange, dstRange))
-                };
+                ];
             }
             else
             {
-                layouts = new[]
-                {
+                layouts =
+                [
                     RF.CreateResourceLayout(new ResourceLayoutDescription(
                         new ResourceLayoutElementDescription(
                             "CopySrc",
@@ -457,12 +459,12 @@ void main()
                             ResourceKind.StructuredBufferReadWrite,
                             ShaderStages.Compute,
                             ResourceLayoutElementOptions.DynamicBinding)))
-                };
-                sets = new[]
-                {
+                ];
+                sets =
+                [
                     RF.CreateResourceSet(new ResourceSetDescription(layouts[0], srcRange)),
-                    RF.CreateResourceSet(new ResourceSetDescription(layouts[1], dstRange)),
-                };
+                    RF.CreateResourceSet(new ResourceSetDescription(layouts[1], dstRange))
+                ];
             }
 
             Pipeline pipeline = RF.CreateComputePipeline(new ComputePipelineDescription(
@@ -478,11 +480,11 @@ void main()
             cl.SetPipeline(pipeline);
             if (combinedLayout)
             {
-                uint[] offsets = new[]
-                {
+                uint[] offsets =
+                [
                     srcBindingMultiple * GD.StructuredBufferMinOffsetAlignment,
                     dstBindingMultiple * GD.StructuredBufferMinOffsetAlignment
-                };
+                ];
                 cl.SetComputeResourceSet(0, sets[0], offsets);
             }
             else
@@ -521,7 +523,8 @@ void main()
                         foreach (uint dstBindingMultiple in new[] { 0, 2, 10 })
                             foreach (bool combinedLayout in new[] { false, true })
                             {
-                                yield return new object[] { srcSetMultiple, srcBindingMultiple, dstSetMultiple, dstBindingMultiple, combinedLayout };
+                                yield return [srcSetMultiple, srcBindingMultiple, dstSetMultiple, dstBindingMultiple, combinedLayout
+                                ];
                             }
         }
     }

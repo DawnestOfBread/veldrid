@@ -320,9 +320,7 @@ namespace Veldrid.D3D11
 
         internal static bool IsUnsupportedFormat(PixelFormat format)
         {
-            return format == PixelFormat.ETC2_R8_G8_B8_UNorm
-                || format == PixelFormat.ETC2_R8_G8_B8_A1_UNorm
-                || format == PixelFormat.ETC2_R8_G8_B8_A8_UNorm;
+            return format is PixelFormat.ETC2_R8_G8_B8_UNorm or PixelFormat.ETC2_R8_G8_B8_A1_UNorm or PixelFormat.ETC2_R8_G8_B8_A8_UNorm;
         }
 
         internal static Format GetViewFormat(Format format)

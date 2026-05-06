@@ -10,6 +10,11 @@ namespace Veldrid.ImageSharp
 {
     public class ImageSharpTexture
     {
+        static ImageSharpTexture()
+        {
+            Configuration.Default.PreferContiguousImageBuffers = true;
+        }
+
         /// <summary>
         /// An array of images, each a single element in the mipmap chain.
         /// The first element is the largest, most detailed level, and each subsequent element
@@ -58,7 +63,7 @@ namespace Veldrid.ImageSharp
             }
             else
             {
-                Images = new Image<Rgba32>[] { image };
+                Images = [image];
             }
         }
 

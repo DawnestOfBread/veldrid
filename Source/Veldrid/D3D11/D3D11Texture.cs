@@ -92,7 +92,7 @@ namespace Veldrid.D3D11
 
             if (Type == TextureType.Texture1D)
             {
-                Texture1DDescription desc1D = new Texture1DDescription()
+                Texture1DDescription desc1D = new()
                 {
                     Width = roundedWidth,
                     MipLevels = (int)description.MipLevels,
@@ -108,7 +108,7 @@ namespace Veldrid.D3D11
             }
             else if (Type == TextureType.Texture2D)
             {
-                Texture2DDescription deviceDescription = new Texture2DDescription()
+                Texture2DDescription deviceDescription = new()
                 {
                     Width = roundedWidth,
                     Height = roundedHeight,
@@ -127,7 +127,7 @@ namespace Veldrid.D3D11
             else
             {
                 Debug.Assert(Type == TextureType.Texture3D);
-                Texture3DDescription desc3D = new Texture3DDescription()
+                Texture3DDescription desc3D = new()
                 {
                     Width = roundedWidth,
                     Height = roundedHeight,
@@ -169,7 +169,7 @@ namespace Veldrid.D3D11
 
         private protected override TextureView CreateFullTextureView(GraphicsDevice gd)
         {
-            TextureViewDescription desc = new TextureViewDescription(this);
+            TextureViewDescription desc = new(this);
             D3D11GraphicsDevice d3d11GD = Util.AssertSubtype<GraphicsDevice, D3D11GraphicsDevice>(gd);
             return new D3D11TextureView(d3d11GD, ref desc);
         }

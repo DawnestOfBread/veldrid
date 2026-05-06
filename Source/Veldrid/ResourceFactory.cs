@@ -145,12 +145,12 @@ namespace Veldrid
             {
                 throw new VeldridException("Width, Height, and Depth must be non-zero.");
             }
-            if ((description.Format == PixelFormat.D24_UNorm_S8_UInt || description.Format == PixelFormat.D32_Float_S8_UInt)
+            if (description.Format is PixelFormat.D24_UNorm_S8_UInt or PixelFormat.D32_Float_S8_UInt
                 && (description.Usage & TextureUsage.DepthStencil) == 0)
             {
                 throw new VeldridException("The givel PixelFormat can only be used in a Texture with DepthStencil usage.");
             }
-            if ((description.Type == TextureType.Texture1D || description.Type == TextureType.Texture3D)
+            if (description.Type is TextureType.Texture1D or TextureType.Texture3D
                 && description.SampleCount != TextureSampleCount.Count1)
             {
                 throw new VeldridException(
@@ -408,8 +408,7 @@ namespace Veldrid
                 throw new VeldridException("GraphicsDevice does not support Compute Shaders.");
             }
             if (!Features.TessellationShaders
-                && (description.Stage == ShaderStages.TessellationControl
-                    || description.Stage == ShaderStages.TessellationEvaluation))
+                && description.Stage is ShaderStages.TessellationControl or ShaderStages.TessellationEvaluation)
             {
                 throw new VeldridException("GraphicsDevice does not support Tessellation Shaders.");
             }

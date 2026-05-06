@@ -125,7 +125,7 @@ namespace Veldrid.Utilities
             //Calculate u parameter and test bound
             u = Vector3.Dot(T, P) * inv_det;
             //The intersection lies outside of the triangle
-            if (u < 0.0f || u > 1.0f)
+            if (u is < 0.0f or > 1.0f)
             {
                 distance = 0f;
                 return false;

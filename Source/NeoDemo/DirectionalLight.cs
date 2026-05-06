@@ -8,7 +8,7 @@ namespace Veldrid.NeoDemo
     public class DirectionalLight
     {
         private RgbaFloat _color = RgbaFloat.White;
-        public Transform Transform { get; } = new Transform();
+        public Transform Transform { get; } = new();
 
         public Vector3 Direction => Transform.Forward;
 

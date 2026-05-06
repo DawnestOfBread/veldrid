@@ -36,7 +36,7 @@ namespace Veldrid.NeoDemo
         {
             SpecializationConstant[] specializations = GetSpecializations(gd);
 
-            bool fixClipZ = (gd.BackendType == GraphicsBackend.OpenGL || gd.BackendType == GraphicsBackend.OpenGLES)
+            bool fixClipZ = gd.BackendType is GraphicsBackend.OpenGL or GraphicsBackend.OpenGLES
                 && !gd.IsDepthRangeZeroToOne;
             bool invertY = false;
 
@@ -45,16 +45,17 @@ namespace Veldrid.NeoDemo
 
         public static SpecializationConstant[] GetSpecializations(GraphicsDevice gd)
         {
-            bool glOrGles = gd.BackendType == GraphicsBackend.OpenGL || gd.BackendType == GraphicsBackend.OpenGLES;
+            bool glOrGles = gd.BackendType is GraphicsBackend.OpenGL or GraphicsBackend.OpenGLES;
 
-            List<SpecializationConstant> specializations = new List<SpecializationConstant>();
-            specializations.Add(new SpecializationConstant(100, gd.IsClipSpaceYInverted));
-            specializations.Add(new SpecializationConstant(101, glOrGles)); // TextureCoordinatesInvertedY
-            specializations.Add(new SpecializationConstant(102, gd.IsDepthRangeZeroToOne));
+            List<SpecializationConstant> specializations =
+            [
+                new(100, gd.IsClipSpaceYInverted),
+                new(101, glOrGles), // TextureCoordinatesInvertedY
+                new(102, gd.IsDepthRangeZeroToOne)
+            ];
 
             PixelFormat swapchainFormat = gd.MainSwapchain.Framebuffer.OutputDescription.ColorAttachments[0].Format;
-            bool swapchainIsSrgb = swapchainFormat == PixelFormat.B8_G8_R8_A8_UNorm_SRgb
-                || swapchainFormat == PixelFormat.R8_G8_B8_A8_UNorm_SRgb;
+            bool swapchainIsSrgb = swapchainFormat is PixelFormat.B8_G8_R8_A8_UNorm_SRgb or PixelFormat.R8_G8_B8_A8_UNorm_SRgb;
             specializations.Add(new SpecializationConstant(103, swapchainIsSrgb));
 
             return specializations.ToArray();
@@ -65,7 +66,7 @@ namespace Veldrid.NeoDemo
             string stageExt = stage == ShaderStages.Vertex ? "vert" : "frag";
             string name = setName + "." + stageExt;
 
-            if (backend == GraphicsBackend.Vulkan || backend == GraphicsBackend.Direct3D11)
+            if (backend is GraphicsBackend.Vulkan or GraphicsBackend.Direct3D11)
             {
                 string bytecodeExtension = GetBytecodeExtension(backend);
                 string bytecodePath = AssetHelper.GetPath(Path.Combine("Shaders", name + bytecodeExtension));

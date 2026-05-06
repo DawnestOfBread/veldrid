@@ -76,7 +76,7 @@ namespace Veldrid
             uint threadGroupSizeZ)
         {
             ComputeShader = shaderStage;
-            ResourceLayouts = new[] { resourceLayout };
+            ResourceLayouts = [resourceLayout];
             ThreadGroupSizeX = threadGroupSizeX;
             ThreadGroupSizeY = threadGroupSizeY;
             ThreadGroupSizeZ = threadGroupSizeZ;
@@ -104,7 +104,7 @@ namespace Veldrid
             SpecializationConstant[] specializations)
         {
             ComputeShader = shaderStage;
-            ResourceLayouts = new[] { resourceLayout };
+            ResourceLayouts = [resourceLayout];
             ThreadGroupSizeX = threadGroupSizeX;
             ThreadGroupSizeY = threadGroupSizeY;
             ThreadGroupSizeZ = threadGroupSizeZ;

@@ -58,20 +58,19 @@ namespace Veldrid.Tests
         public void Dispose_Pipeline()
         {
             Shader[] shaders = TestShaders.LoadVertexFragment(RF, "UIntVertexAttribs");
-            ShaderSetDescription shaderSet = new ShaderSetDescription(
-                new VertexLayoutDescription[]
-                {
+            ShaderSetDescription shaderSet = new(
+                [
                     new VertexLayoutDescription(
                         new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2),
                         new VertexElementDescription("Color_UInt", VertexElementSemantic.TextureCoordinate, VertexElementFormat.UInt4))
-                },
+                ],
                 shaders);
 
             ResourceLayout layout = RF.CreateResourceLayout(new ResourceLayoutDescription(
                 new ResourceLayoutElementDescription("InfoBuffer", ResourceKind.UniformBuffer, ShaderStages.Vertex),
                 new ResourceLayoutElementDescription("Ortho", ResourceKind.UniformBuffer, ShaderStages.Vertex)));
 
-            GraphicsPipelineDescription gpd = new GraphicsPipelineDescription(
+            GraphicsPipelineDescription gpd = new(
                 BlendStateDescription.SingleOverrideBlend,
                 DepthStencilStateDescription.Disabled,
                 RasterizerStateDescription.Default,

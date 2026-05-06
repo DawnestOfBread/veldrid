@@ -9,11 +9,11 @@ namespace Veldrid.OpenGL.NoAllocEntryList
     internal unsafe class OpenGLNoAllocCommandEntryList : OpenGLCommandEntryList, IDisposable
     {
         private readonly StagingMemoryPool _memoryPool;
-        private readonly List<EntryStorageBlock> _blocks = new List<EntryStorageBlock>();
+        private readonly List<EntryStorageBlock> _blocks = [];
         private EntryStorageBlock _currentBlock;
         private uint _totalEntries;
-        private readonly List<object> _resourceList = new List<object>();
-        private readonly List<StagingBlock> _stagingBlocks = new List<StagingBlock>();
+        private readonly List<object> _resourceList = [];
+        private readonly List<StagingBlock> _stagingBlocks = [];
 
         // Entry IDs
         private const byte BeginEntryID = 1;
@@ -391,79 +391,79 @@ namespace Veldrid.OpenGL.NoAllocEntryList
 
         public void Begin()
         {
-            NoAllocBeginEntry entry = new NoAllocBeginEntry();
+            NoAllocBeginEntry entry = new();
             AddEntry(BeginEntryID, ref entry);
         }
 
         public void ClearColorTarget(uint index, RgbaFloat clearColor)
         {
-            NoAllocClearColorTargetEntry entry = new NoAllocClearColorTargetEntry(index, clearColor);
+            NoAllocClearColorTargetEntry entry = new(index, clearColor);
             AddEntry(ClearColorTargetID, ref entry);
         }
 
         public void ClearDepthTarget(float depth, byte stencil)
         {
-            NoAllocClearDepthTargetEntry entry = new NoAllocClearDepthTargetEntry(depth, stencil);
+            NoAllocClearDepthTargetEntry entry = new(depth, stencil);
             AddEntry(ClearDepthTargetID, ref entry);
         }
 
         public void Draw(uint vertexCount, uint instanceCount, uint vertexStart, uint instanceStart)
         {
-            NoAllocDrawEntry entry = new NoAllocDrawEntry(vertexCount, instanceCount, vertexStart, instanceStart);
+            NoAllocDrawEntry entry = new(vertexCount, instanceCount, vertexStart, instanceStart);
             AddEntry(DrawEntryID, ref entry);
         }
 
         public void DrawIndexed(uint indexCount, uint instanceCount, uint indexStart, int vertexOffset, uint instanceStart)
         {
-            NoAllocDrawIndexedEntry entry = new NoAllocDrawIndexedEntry(indexCount, instanceCount, indexStart, vertexOffset, instanceStart);
+            NoAllocDrawIndexedEntry entry = new(indexCount, instanceCount, indexStart, vertexOffset, instanceStart);
             AddEntry(DrawIndexedEntryID, ref entry);
         }
 
         public void DrawIndirect(DeviceBuffer indirectBuffer, uint offset, uint drawCount, uint stride)
         {
-            NoAllocDrawIndirectEntry entry = new NoAllocDrawIndirectEntry(Track(indirectBuffer), offset, drawCount, stride);
+            NoAllocDrawIndirectEntry entry = new(Track(indirectBuffer), offset, drawCount, stride);
             AddEntry(DrawIndirectEntryID, ref entry);
         }
 
         public void DrawIndexedIndirect(DeviceBuffer indirectBuffer, uint offset, uint drawCount, uint stride)
         {
-            NoAllocDrawIndexedIndirectEntry entry = new NoAllocDrawIndexedIndirectEntry(Track(indirectBuffer), offset, drawCount, stride);
+            NoAllocDrawIndexedIndirectEntry entry = new(Track(indirectBuffer), offset, drawCount, stride);
             AddEntry(DrawIndexedIndirectEntryID, ref entry);
         }
 
         public void Dispatch(uint groupCountX, uint groupCountY, uint groupCountZ)
         {
-            NoAllocDispatchEntry entry = new NoAllocDispatchEntry(groupCountX, groupCountY, groupCountZ);
+            NoAllocDispatchEntry entry = new(groupCountX, groupCountY, groupCountZ);
             AddEntry(DispatchEntryID, ref entry);
         }
 
         public void DispatchIndirect(DeviceBuffer indirectBuffer, uint offset)
         {
-            NoAllocDispatchIndirectEntry entry = new NoAllocDispatchIndirectEntry(Track(indirectBuffer), offset);
+            NoAllocDispatchIndirectEntry entry = new(Track(indirectBuffer), offset);
             AddEntry(DispatchIndirectEntryID, ref entry);
         }
 
         public void End()
         {
-            NoAllocEndEntry entry = new NoAllocEndEntry();
+            NoAllocEndEntry entry = new();
             AddEntry(EndEntryID, ref entry);
         }
 
         public void SetFramebuffer(Framebuffer fb)
         {
-            NoAllocSetFramebufferEntry entry = new NoAllocSetFramebufferEntry(Track(fb));
+            NoAllocSetFramebufferEntry entry = new(Track(fb));
             AddEntry(SetFramebufferEntryID, ref entry);
         }
 
         public void SetIndexBuffer(DeviceBuffer buffer, IndexFormat format, uint offset)
         {
-            NoAllocSetIndexBufferEntry entry = new NoAllocSetIndexBufferEntry(Track(buffer), format, offset);
+            NoAllocSetIndexBufferEntry entry = new(Track(buffer), format, offset);
             AddEntry(SetIndexBufferEntryID, ref entry);
         }
 
         public void SetPipeline(Pipeline pipeline)
         {
-            NoAllocSetPipelineEntry entry = new NoAllocSetPipelineEntry(Track(pipeline));
+            NoAllocSetPipelineEntry entry = new(Track(pipeline));
             AddEntry(SetPipelineEntryID, ref entry);
         }
 
@@ -502,25 +502,25 @@ namespace Veldrid.OpenGL.NoAllocEntryList
 
         public void SetScissorRect(uint index, uint x, uint y, uint width, uint height)
         {
-            NoAllocSetScissorRectEntry entry = new NoAllocSetScissorRectEntry(index, x, y, width, height);
+            NoAllocSetScissorRectEntry entry = new(index, x, y, width, height);
             AddEntry(SetScissorRectEntryID, ref entry);
         }
 
         public void SetVertexBuffer(uint index, DeviceBuffer buffer, uint offset)
         {
-            NoAllocSetVertexBufferEntry entry = new NoAllocSetVertexBufferEntry(index, Track(buffer), offset);
+            NoAllocSetVertexBufferEntry entry = new(index, Track(buffer), offset);
             AddEntry(SetVertexBufferEntryID, ref entry);
         }
 
         public void SetViewport(uint index, ref Viewport viewport)
         {
-            NoAllocSetViewportEntry entry = new NoAllocSetViewportEntry(index, ref viewport);
+            NoAllocSetViewportEntry entry = new(index, ref viewport);
             AddEntry(SetViewportEntryID, ref entry);
         }
 
         public void ResolveTexture(Texture source, Texture destination)
         {
-            NoAllocResolveTextureEntry entry = new NoAllocResolveTextureEntry(Track(source), Track(destination));
+            NoAllocResolveTextureEntry entry = new(Track(source), Track(destination));
             AddEntry(ResolveTextureEntryID, ref entry);
         }
 
@@ -528,13 +528,13 @@ namespace Veldrid.OpenGL.NoAllocEntryList
         {
             StagingBlock stagingBlock = _memoryPool.Stage(source, sizeInBytes);
             _stagingBlocks.Add(stagingBlock);
-            NoAllocUpdateBufferEntry entry = new NoAllocUpdateBufferEntry(Track(buffer), bufferOffsetInBytes, stagingBlock, sizeInBytes);
+            NoAllocUpdateBufferEntry entry = new(Track(buffer), bufferOffsetInBytes, stagingBlock, sizeInBytes);
             AddEntry(UpdateBufferEntryID, ref entry);
         }
 
         public void CopyBuffer(DeviceBuffer source, uint sourceOffset, DeviceBuffer destination, uint destinationOffset, uint sizeInBytes)
         {
-            NoAllocCopyBufferEntry entry = new NoAllocCopyBufferEntry(
+            NoAllocCopyBufferEntry entry = new(
                 Track(source),
                 sourceOffset,
                 Track(destination),
@@ -555,7 +555,7 @@ namespace Veldrid.OpenGL.NoAllocEntryList
             uint width, uint height, uint depth,
             uint layerCount)
         {
-            NoAllocCopyTextureEntry entry = new NoAllocCopyTextureEntry(
+            NoAllocCopyTextureEntry entry = new(
                 Track(source),
                 srcX, srcY, srcZ,
                 srcMipLevel,
@@ -571,25 +571,25 @@ namespace Veldrid.OpenGL.NoAllocEntryList
 
         public void GenerateMipmaps(Texture texture)
         {
-            NoAllocGenerateMipmapsEntry entry = new NoAllocGenerateMipmapsEntry(Track(texture));
+            NoAllocGenerateMipmapsEntry entry = new(Track(texture));
             AddEntry(GenerateMipmapsEntryID, ref entry);
         }
 
         public void PushDebugGroup(string name)
         {
-            NoAllocPushDebugGroupEntry entry = new NoAllocPushDebugGroupEntry(Track(name));
+            NoAllocPushDebugGroupEntry entry = new(Track(name));
             AddEntry(PushDebugGroupEntryID, ref entry);
         }
 
         public void PopDebugGroup()
         {
-            NoAllocPopDebugGroupEntry entry = new NoAllocPopDebugGroupEntry();
+            NoAllocPopDebugGroupEntry entry = new();
             AddEntry(PopDebugGroupEntryID, ref entry);
         }
 
         public void InsertDebugMarker(string name)
         {
-            NoAllocInsertDebugMarkerEntry entry = new NoAllocInsertDebugMarkerEntry(Track(name));
+            NoAllocInsertDebugMarkerEntry entry = new(Track(name));
             AddEntry(InsertDebugMarkerEntryID, ref entry);
         }
 

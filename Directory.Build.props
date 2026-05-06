@@ -6,6 +6,8 @@
     <BinDir>$(RepositoryRootDirectory)Build</BinDir>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+
+    <UseStableVersions>false</UseStableVersions>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -16,7 +18,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <VeldridSpirvVersion>1.0.14</VeldridSpirvVersion>
+    <VeldridSpirvVersion>1.0.15</VeldridSpirvVersion>
     <NativeLibraryLoaderVersion>1.0.13</NativeLibraryLoaderVersion>
     <VorticeWindowsVersion>2.4.2</VorticeWindowsVersion>
   </PropertyGroup>

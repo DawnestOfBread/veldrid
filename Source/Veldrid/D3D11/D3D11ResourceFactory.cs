@@ -67,7 +67,7 @@ namespace Veldrid.D3D11
 
         protected override Texture CreateTextureCore(ulong nativeTexture, ref TextureDescription description)
         {
-            ID3D11Texture2D existingTexture = new ID3D11Texture2D((IntPtr)nativeTexture);
+            ID3D11Texture2D existingTexture = new((IntPtr)nativeTexture);
             return new D3D11Texture(existingTexture, description.Type, description.Format);
         }
 

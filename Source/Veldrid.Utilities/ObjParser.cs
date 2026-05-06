@@ -12,11 +12,11 @@ namespace Veldrid.Utilities
     /// </summary>
     public class ObjParser
     {
-        private static readonly string[] s_newline = new string[] { "\n" };
-        private static readonly char[] s_whitespaceChars = new char[] { ' ' };
-        private static readonly char[] s_slashChar = new char[] { '/' };
+        private static readonly string[] s_newline = ["\n"];
+        private static readonly char[] s_whitespaceChars = [' '];
+        private static readonly char[] s_slashChar = ['/'];
 
-        private readonly ParseContext _pc = new ParseContext();
+        private readonly ParseContext _pc = new();
 
         /// <summary>
         /// Parses an <see cref="ObjFile"/> from the given raw text lines.
@@ -42,7 +42,7 @@ namespace Veldrid.Utilities
         public ObjFile Parse(Stream s)
         {
             string text;
-            using (StreamReader sr = new StreamReader(s))
+            using (StreamReader sr = new(s))
             {
                 text = sr.ReadToEnd();
             }
@@ -72,16 +72,16 @@ namespace Veldrid.Utilities
 
         private class ParseContext
         {
-            private List<Vector3> _positions = new List<Vector3>();
-            private List<Vector3> _normals = new List<Vector3>();
-            private List<Vector2> _texCoords = new List<Vector2>();
+            private List<Vector3> _positions = [];
+            private List<Vector3> _normals = [];
+            private List<Vector2> _texCoords = [];
 
-            private List<ObjFile.MeshGroup> _groups = new List<ObjFile.MeshGroup>();
+            private List<ObjFile.MeshGroup> _groups = [];
 
             private string _currentGroupName;
             private string _currentMaterial;
             private int _currentSmoothingGroup;
-            private List<ObjFile.Face> _currentGroupFaces = new List<ObjFile.Face>();
+            private List<ObjFile.Face> _currentGroupFaces = [];
 
             private int _currentLine;
             private string _currentLineText;
@@ -386,9 +386,9 @@ namespace Veldrid.Utilities
         /// <returns>A new <see cref="ConstructedMeshInfo"/>.</returns>
         public ConstructedMeshInfo GetMesh(MeshGroup group)
         {
-            Dictionary<FaceVertex, ushort> vertexMap = new Dictionary<FaceVertex, ushort>();
+            Dictionary<FaceVertex, ushort> vertexMap = new();
             ushort[] indices = new ushort[group.Faces.Length * 3];
-            List<VertexPositionNormalTexture> vertices = new List<VertexPositionNormalTexture>();
+            List<VertexPositionNormalTexture> vertices = [];
 
             for (int i = 0; i < group.Faces.Length; i++)
             {

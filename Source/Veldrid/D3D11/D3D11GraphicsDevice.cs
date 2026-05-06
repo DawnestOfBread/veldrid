@@ -27,15 +27,14 @@ namespace Veldrid.D3D11
         private readonly D3D11Swapchain _mainSwapchain;
         private readonly bool _supportsConcurrentResources;
         private readonly bool _supportsCommandLists;
-        private readonly object _immediateContextLock = new object();
+        private readonly object _immediateContextLock = new();
         private readonly BackendInfoD3D11 _d3d11Info;
 
-        private readonly object _mappedResourceLock = new object();
-        private readonly Dictionary<MappedResourceCacheKey, MappedResourceInfo> _mappedResources
-            = new Dictionary<MappedResourceCacheKey, MappedResourceInfo>();
+        private readonly object _mappedResourceLock = new();
+        private readonly Dictionary<MappedResourceCacheKey, MappedResourceInfo> _mappedResources = new();
 
-        private readonly object _stagingResourcesLock = new object();
-        private readonly List<D3D11Buffer> _availableStagingBuffers = new List<D3D11Buffer>();
+        private readonly object _stagingResourcesLock = new();
+        private readonly List<D3D11Buffer> _availableStagingBuffers = [];
 
         public override string DeviceName => _deviceName;
 
@@ -93,11 +92,10 @@ namespace Veldrid.D3D11
                     VorticeD3D11.D3D11CreateDevice(options.AdapterPtr,
                         Vortice.Direct3D.DriverType.Hardware,
                         flags,
-                        new[]
-                        {
+                        [
                             Vortice.Direct3D.FeatureLevel.Level_11_1,
-                            Vortice.Direct3D.FeatureLevel.Level_11_0,
-                        },
+                            Vortice.Direct3D.FeatureLevel.Level_11_0
+                        ],
                         out _device).CheckError();
                 }
                 else
@@ -105,11 +103,10 @@ namespace Veldrid.D3D11
                     VorticeD3D11.D3D11CreateDevice(IntPtr.Zero,
                         Vortice.Direct3D.DriverType.Hardware,
                         flags,
-                        new[]
-                        {
+                        [
                             Vortice.Direct3D.FeatureLevel.Level_11_1,
-                            Vortice.Direct3D.FeatureLevel.Level_11_0,
-                        },
+                            Vortice.Direct3D.FeatureLevel.Level_11_0
+                        ],
                         out _device).CheckError();
                 }
             }
@@ -319,7 +316,7 @@ namespace Veldrid.D3D11
 
         protected override MappedResource MapCore(MappableResource resource, MapMode mode, uint subresource)
         {
-            MappedResourceCacheKey key = new MappedResourceCacheKey(resource, subresource);
+            MappedResourceCacheKey key = new(resource, subresource);
             lock (_mappedResourceLock)
             {
                 if (_mappedResources.TryGetValue(key, out MappedResourceInfo info))
@@ -388,7 +385,7 @@ namespace Veldrid.D3D11
 
         protected override void UnmapCore(MappableResource resource, uint subresource)
         {
-            MappedResourceCacheKey key = new MappedResourceCacheKey(resource, subresource);
+            MappedResourceCacheKey key = new(resource, subresource);
             bool commitUnmap;
 
             lock (_mappedResourceLock)
@@ -475,7 +472,7 @@ namespace Veldrid.D3D11
             {
                 D3D11Buffer staging = GetFreeStagingBuffer(sizeInBytes);
                 UpdateBuffer(staging, 0, source, sizeInBytes);
-                Box sourceRegion = new Box(0, 0, 0, (int)sizeInBytes, 1, 1);
+                Box sourceRegion = new(0, 0, 0, (int)sizeInBytes, 1, 1);
                 lock (_immediateContextLock)
                 {
                     _immediateContext.CopySubresourceRegion(
@@ -529,7 +526,7 @@ namespace Veldrid.D3D11
             if (useMap)
             {
                 uint subresource = texture.CalculateSubresource(mipLevel, arrayLayer);
-                MappedResourceCacheKey key = new MappedResourceCacheKey(texture, subresource);
+                MappedResourceCacheKey key = new(texture, subresource);
                 MappedResource map = MapCore(texture, MapMode.Write, subresource);
 
                 uint denseRowSize = FormatHelpers.GetRowPitch(width, texture.Format);
@@ -550,7 +547,7 @@ namespace Veldrid.D3D11
             else
             {
                 int subresource = D3D11Util.ComputeSubresource(mipLevel, texture.MipLevels, arrayLayer);
-                Box resourceRegion = new Box(
+                Box resourceRegion = new(
                     left: (int)x,
                     right: (int)(x + width),
                     top: (int)y,
@@ -611,8 +608,8 @@ namespace Veldrid.D3D11
             return result;
         }
 
-        private readonly object _resetEventsLock = new object();
-        private readonly List<ManualResetEvent[]> _resetEvents = new List<ManualResetEvent[]>();
+        private readonly object _resetEventsLock = new();
+        private readonly List<ManualResetEvent[]> _resetEvents = [];
 
         private ManualResetEvent[] GetResetEventArray(int length)
         {

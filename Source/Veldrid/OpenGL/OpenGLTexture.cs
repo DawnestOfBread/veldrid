@@ -276,7 +276,7 @@ namespace Veldrid.OpenGL
                     }
                 }
             }
-            else if (TextureTarget == TextureTarget.Texture2D || TextureTarget == TextureTarget.Texture1DArray)
+            else if (TextureTarget is TextureTarget.Texture2D or TextureTarget.Texture1DArray)
             {
                 uint heightOrArrayLayers = TextureTarget == TextureTarget.Texture2D ? Height : ArrayLayers;
                 if (dsa)
@@ -637,7 +637,7 @@ namespace Veldrid.OpenGL
 
                 _gd.TextureSamplerManager.SetTextureTransient(TextureTarget, Texture);
 
-                if (TextureTarget == TextureTarget.Texture2D || TextureTarget == TextureTarget.Texture2DMultisample)
+                if (TextureTarget is TextureTarget.Texture2D or TextureTarget.Texture2DMultisample)
                 {
                     glFramebufferTexture2D(
                         framebufferTarget,
@@ -647,9 +647,7 @@ namespace Veldrid.OpenGL
                         (int)mipLevel);
                     CheckLastError();
                 }
-                else if (TextureTarget == TextureTarget.Texture2DArray
-                    || TextureTarget == TextureTarget.Texture2DMultisampleArray
-                    || TextureTarget == TextureTarget.Texture3D)
+                else if (TextureTarget is TextureTarget.Texture2DArray or TextureTarget.Texture2DMultisampleArray or TextureTarget.Texture3D)
                 {
                     glFramebufferTextureLayer(
                         framebufferTarget,

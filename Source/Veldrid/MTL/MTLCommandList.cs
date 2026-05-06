@@ -17,7 +17,7 @@ namespace Veldrid.MTL
         private MTLRenderCommandEncoder _rce;
         private MTLBlitCommandEncoder _bce;
         private MTLComputeCommandEncoder _cce;
-        private RgbaFloat?[] _clearColors = Array.Empty<RgbaFloat?>();
+        private RgbaFloat?[] _clearColors = [];
         private (float depth, byte stencil)? _clearDepth;
         private MTLBuffer _indexBuffer;
         private uint _ibOffset;
@@ -26,9 +26,9 @@ namespace Veldrid.MTL
         private bool _graphicsPipelineChanged;
         private new MTLPipeline _computePipeline;
         private bool _computePipelineChanged;
-        private MTLViewport[] _viewports = Array.Empty<MTLViewport>();
+        private MTLViewport[] _viewports = [];
         private bool _viewportsChanged;
-        private MTLScissorRect[] _scissorRects = Array.Empty<MTLScissorRect>();
+        private MTLScissorRect[] _scissorRects = [];
         private bool _scissorRectsChanged;
         private uint _graphicsResourceSetCount;
         private BoundResourceSetInfo[] _graphicsResourceSets;
@@ -437,7 +437,7 @@ namespace Veldrid.MTL
                         ? mipHeight
                         : height;
 
-                    MTLSize sourceSize = new MTLSize(copyWidth, copyHeight, depth);
+                    MTLSize sourceSize = new(copyWidth, copyHeight, depth);
                     if (dstMTLTexture.Type != TextureType.Texture3D)
                     {
                         srcDepthPitch = 0;
@@ -540,8 +540,8 @@ namespace Veldrid.MTL
             else if (!srcIsStaging && dstIsStaging)
             {
                 // Normal -> Staging
-                MTLOrigin srcOrigin = new MTLOrigin(srcX, srcY, srcZ);
-                MTLSize srcSize = new MTLSize(width, height, depth);
+                MTLOrigin srcOrigin = new(srcX, srcY, srcZ);
+                MTLSize srcSize = new(width, height, depth);
                 for (uint layer = 0; layer < layerCount; layer++)
                 {
                     dstMTLTexture.GetSubresourceLayout(

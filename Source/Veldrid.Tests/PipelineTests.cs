@@ -15,22 +15,21 @@ namespace Veldrid.Tests
             Texture colorTex = RF.CreateTexture(TextureDescription.Texture2D(1, 1, 1, 1, PixelFormat.R8_G8_B8_A8_UNorm, TextureUsage.RenderTarget));
             Framebuffer framebuffer = RF.CreateFramebuffer(new FramebufferDescription(null, colorTex));
 
-            ShaderSetDescription shaderSet = new ShaderSetDescription(
-                new VertexLayoutDescription[]
-                {
+            ShaderSetDescription shaderSet = new(
+                [
                     new VertexLayoutDescription(
                         24,
                         0,
                         new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2),
                         new VertexElementDescription("Color_UInt", VertexElementSemantic.TextureCoordinate, VertexElementFormat.UInt4))
-                },
+                ],
                 TestShaders.LoadVertexFragment(RF, "UIntVertexAttribs"));
 
             ResourceLayout layout = RF.CreateResourceLayout(new ResourceLayoutDescription(
                 new ResourceLayoutElementDescription("InfoBuffer", ResourceKind.UniformBuffer, ShaderStages.Vertex),
                 new ResourceLayoutElementDescription("Ortho", ResourceKind.UniformBuffer, ShaderStages.Vertex)));
 
-            GraphicsPipelineDescription gpd = new GraphicsPipelineDescription(
+            GraphicsPipelineDescription gpd = new(
                 BlendStateDescription.SingleOverrideBlend,
                 DepthStencilStateDescription.Disabled,
                 RasterizerStateDescription.Default,

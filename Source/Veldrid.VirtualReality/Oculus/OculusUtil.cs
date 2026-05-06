@@ -105,7 +105,7 @@ namespace Veldrid.VirtualReality.Oculus
 
         public static bool IsSrgbFormat(PixelFormat format)
         {
-            return format == PixelFormat.B8_G8_R8_A8_UNorm_SRgb || format == PixelFormat.R8_G8_B8_A8_UNorm_SRgb;
+            return format is PixelFormat.B8_G8_R8_A8_UNorm_SRgb or PixelFormat.R8_G8_B8_A8_UNorm_SRgb;
         }
     }
 }

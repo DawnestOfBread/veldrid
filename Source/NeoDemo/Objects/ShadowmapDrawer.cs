@@ -9,7 +9,7 @@ namespace Veldrid.NeoDemo.Objects
     public class ShadowmapDrawer : Renderable
     {
         private readonly Func<Sdl2Window> _windowGetter;
-        private readonly DisposeCollector _disposeCollector = new DisposeCollector();
+        private readonly DisposeCollector _disposeCollector = new();
 
         private DeviceBuffer _vb;
         private DeviceBuffer _ib;
@@ -19,7 +19,7 @@ namespace Veldrid.NeoDemo.Objects
         private ResourceSet _resourceSet;
 
         private Vector2 _position;
-        private Vector2 _size = new Vector2(100, 100);
+        private Vector2 _size = new(100, 100);
 
         private readonly Func<TextureView> _bindingGetter;
         private SizeInfo? _si;
@@ -54,12 +54,12 @@ namespace Veldrid.NeoDemo.Objects
             _ib = factory.CreateBuffer(new BufferDescription(s_quadIndices.SizeInBytes(), BufferUsage.IndexBuffer));
             cl.UpdateBuffer(_ib, 0, s_quadIndices);
 
-            VertexLayoutDescription[] vertexLayouts = new VertexLayoutDescription[]
-            {
-                new VertexLayoutDescription(
+            VertexLayoutDescription[] vertexLayouts =
+            [
+                new(
                     new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2),
                     new VertexElementDescription("TexCoord", VertexElementSemantic.TextureCoordinate,  VertexElementFormat.Float2))
-            };
+            ];
 
             (Shader vs, Shader fs) = StaticResourceCache.GetShaders(gd, gd.ResourceFactory, "ShadowmapPreviewShader");
 
@@ -69,16 +69,16 @@ namespace Veldrid.NeoDemo.Objects
                 new ResourceLayoutElementDescription("Tex", ResourceKind.TextureReadOnly, ShaderStages.Fragment),
                 new ResourceLayoutElementDescription("TexSampler", ResourceKind.Sampler, ShaderStages.Fragment)));
 
-            GraphicsPipelineDescription pd = new GraphicsPipelineDescription(
+            GraphicsPipelineDescription pd = new(
                 BlendStateDescription.SingleOverrideBlend,
                 new DepthStencilStateDescription(false, true, ComparisonKind.Always),
                 RasterizerStateDescription.Default,
                 PrimitiveTopology.TriangleList,
                 new ShaderSetDescription(
                     vertexLayouts,
-                    new[] { vs, fs },
+                    [vs, fs],
                     ShaderHelper.GetSpecializations(gd)),
-                new ResourceLayout[] { layout },
+                [layout],
                 sc.MainSceneFramebuffer.OutputDescription);
 
             _pipeline = factory.CreateGraphicsPipeline(ref pd);
@@ -135,15 +135,15 @@ namespace Veldrid.NeoDemo.Objects
             cl.DrawIndexed((uint)s_quadIndices.Length, 1, 0, 0, 0);
         }
 
-        private static float[] s_quadVerts = new float[]
-        {
+        private static float[] s_quadVerts =
+        [
             0, 0, 0, 0,
             1, 0, 1, 0,
             1, 1, 1, 1,
             0, 1, 0, 1
-        };
+        ];
 
-        private static ushort[] s_quadIndices = new ushort[] { 0, 1, 2, 0, 2, 3 };
+        private static ushort[] s_quadIndices = [0, 1, 2, 0, 2, 3];
 
         public struct SizeInfo
         {

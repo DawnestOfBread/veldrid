@@ -94,7 +94,7 @@ namespace Veldrid.Tests
             for (uint level = 0; level < 11; level++)
             {
                 framebuffers[level] = RF.CreateFramebuffer(
-                    new FramebufferDescription(null, new[] { new FramebufferAttachmentDescription(testTex, 0, level) }));
+                    new FramebufferDescription(null, [new FramebufferAttachmentDescription(testTex, 0, level)]));
             }
 
             CommandList cl = RF.CreateCommandList();

@@ -8,11 +8,11 @@ namespace Veldrid.NeoDemo
 {
     public static class InputTracker
     {
-        private static HashSet<Key> _currentlyPressedKeys = new HashSet<Key>();
-        private static HashSet<Key> _newKeysThisFrame = new HashSet<Key>();
+        private static HashSet<Key> _currentlyPressedKeys = [];
+        private static HashSet<Key> _newKeysThisFrame = [];
 
-        private static HashSet<MouseButton> _currentlyPressedMouseButtons = new HashSet<MouseButton>();
-        private static HashSet<MouseButton> _newMouseButtonsThisFrame = new HashSet<MouseButton>();
+        private static HashSet<MouseButton> _currentlyPressedMouseButtons = [];
+        private static HashSet<MouseButton> _newMouseButtonsThisFrame = [];
 
         public static Vector2 MousePosition;
         public static Vector2 MouseDelta;

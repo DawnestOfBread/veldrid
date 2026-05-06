@@ -699,7 +699,7 @@ namespace Veldrid.VirtualReality.Oculus
     {
         public readonly byte Value;
         public static implicit operator bool(ovrBool b8) => b8.Value != 0;
-        public static implicit operator ovrBool(bool b) => new ovrBool(b);
+        public static implicit operator ovrBool(bool b) => new(b);
 
         public ovrBool(bool value)
         {
@@ -1201,13 +1201,13 @@ namespace Veldrid.VirtualReality.Oculus
         {
             get
             {
-                Debug.Assert(index == 0 || index == 1);
+                Debug.Assert(index is 0 or 1);
                 if (index == 0) { return Left; }
                 else { return Right; }
             }
             set
             {
-                Debug.Assert(index == 0 || index == 1);
+                Debug.Assert(index is 0 or 1);
                 if (index == 0) { Left = value; }
                 else { Right = value; }
             }
@@ -1230,13 +1230,13 @@ namespace Veldrid.VirtualReality.Oculus
         {
             get
             {
-                Debug.Assert(index == 0 || index == 1);
+                Debug.Assert(index is 0 or 1);
                 if (index == 0) { return Left; }
                 else { return Right; }
             }
             set
             {
-                Debug.Assert(index == 0 || index == 1);
+                Debug.Assert(index is 0 or 1);
                 if (index == 0) { Left = value; }
                 else { Right = value; }
             }
@@ -1253,13 +1253,13 @@ namespace Veldrid.VirtualReality.Oculus
         {
             get
             {
-                Debug.Assert(index == 0 || index == 1);
+                Debug.Assert(index is 0 or 1);
                 if (index == 0) { return Left; }
                 else { return Right; }
             }
             set
             {
-                Debug.Assert(index == 0 || index == 1);
+                Debug.Assert(index is 0 or 1);
                 if (index == 0) { Left = value; }
                 else { Right = value; }
             }
@@ -1276,13 +1276,13 @@ namespace Veldrid.VirtualReality.Oculus
         {
             get
             {
-                Debug.Assert(index == 0 || index == 1);
+                Debug.Assert(index is 0 or 1);
                 if (index == 0) { return Left; }
                 else { return Right; }
             }
             set
             {
-                Debug.Assert(index == 0 || index == 1);
+                Debug.Assert(index is 0 or 1);
                 if (index == 0) { Left = value; }
                 else { Right = value; }
             }
@@ -1299,13 +1299,13 @@ namespace Veldrid.VirtualReality.Oculus
         {
             get
             {
-                Debug.Assert(index == 0 || index == 1);
+                Debug.Assert(index is 0 or 1);
                 if (index == 0) { return Left; }
                 else { return Right; }
             }
             set
             {
-                Debug.Assert(index == 0 || index == 1);
+                Debug.Assert(index is 0 or 1);
                 if (index == 0) { Left = value; }
                 else { Right = value; }
             }

@@ -24,7 +24,7 @@ namespace Veldrid.MTL
         public MTLDepthClipMode DepthClipMode { get; }
         public override bool IsComputePipeline { get; }
         public bool ScissorTestEnabled { get; }
-        public MTLSize ThreadsPerThreadgroup { get; } = new MTLSize(1, 1, 1);
+        public MTLSize ThreadsPerThreadgroup { get; } = new(1, 1, 1);
         public bool HasStencil { get; }
         public override string Name { get; set; }
         public uint StencilReference { get; }
@@ -245,8 +245,7 @@ namespace Veldrid.MTL
                 foreach (ResourceLayoutElementDescription rle in layout.Description.Elements)
                 {
                     ResourceKind kind = rle.Kind;
-                    if (kind == ResourceKind.UniformBuffer
-                        || kind == ResourceKind.StructuredBufferReadOnly)
+                    if (kind is ResourceKind.UniformBuffer or ResourceKind.StructuredBufferReadOnly)
                     {
                         MTLPipelineBufferDescriptor bufferDesc = buffers[bufferIndex];
                         bufferDesc.mutability = MTLMutability.Immutable;
@@ -283,7 +282,7 @@ namespace Veldrid.MTL
 
         private void AddSpecializedFunction(MTLFunction function)
         {
-            if (_specializedFunctions == null) { _specializedFunctions = new List<MTLFunction>(); }
+            if (_specializedFunctions == null) { _specializedFunctions = []; }
             _specializedFunctions.Add(function);
         }
 

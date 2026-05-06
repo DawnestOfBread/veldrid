@@ -18,7 +18,7 @@ namespace Veldrid.NeoDemo
         public DeviceBuffer CameraInfoBuffer { get; private set; }
         public DeviceBuffer PointLightsBuffer { get; private set; }
 
-        public CascadedShadowMaps ShadowMaps { get; private set; } = new CascadedShadowMaps();
+        public CascadedShadowMaps ShadowMaps { get; private set; } = new();
         public TextureView NearShadowMapView => ShadowMaps.NearShadowMapView;
         public TextureView MidShadowMapView => ShadowMaps.MidShadowMapView;
         public TextureView FarShadowMapView => ShadowMaps.FarShadowMapView;
@@ -52,7 +52,7 @@ namespace Veldrid.NeoDemo
         public Framebuffer DuplicatorFramebuffer { get; private set; }
 
         public Camera Camera { get; set; }
-        public DirectionalLight DirectionalLight { get; } = new DirectionalLight();
+        public DirectionalLight DirectionalLight { get; } = new();
         public TextureSampleCount MainSceneSampleCount { get; internal set; }
         public ColorWriteMask MainSceneMask { get; internal set; } = ColorWriteMask.All;
         public DeviceBuffer MirrorClipPlaneBuffer { get; private set; }
@@ -79,15 +79,15 @@ namespace Veldrid.NeoDemo
 
             PointLightsBuffer = factory.CreateBuffer(new BufferDescription((uint)Unsafe.SizeOf<PointLightsInfo.Blittable>(), BufferUsage.UniformBuffer));
 
-            PointLightsInfo pli = new PointLightsInfo();
+            PointLightsInfo pli = new();
             pli.NumActiveLights = 4;
-            pli.PointLights = new PointLightInfo[4]
-            {
+            pli.PointLights =
+            [
                 new PointLightInfo { Color = new Vector3(.6f, .6f, .6f), Position = new Vector3(-50, 5, 0), Range = 75f },
                 new PointLightInfo { Color = new Vector3(.6f, .35f, .4f), Position = new Vector3(0, 5, 0), Range = 100f },
                 new PointLightInfo { Color = new Vector3(.6f, .6f, 0.35f), Position = new Vector3(50, 5, 0), Range = 40f },
-                new PointLightInfo { Color = new Vector3(0.4f, 0.4f, .6f), Position = new Vector3(25, 5, 45), Range = 150f },
-            };
+                new PointLightInfo { Color = new Vector3(0.4f, 0.4f, .6f), Position = new Vector3(25, 5, 45), Range = 150f }
+            ];
 
             cl.UpdateBuffer(PointLightsBuffer, 0, pli.GetBlittable());
 
@@ -234,7 +234,7 @@ namespace Veldrid.NeoDemo
             DuplicatorTargetSet0 = factory.CreateResourceSet(new ResourceSetDescription(TextureSamplerResourceLayout, DuplicatorTargetView0, gd.PointSampler));
             DuplicatorTargetSet1 = factory.CreateResourceSet(new ResourceSetDescription(TextureSamplerResourceLayout, DuplicatorTargetView1, gd.PointSampler));
 
-            FramebufferDescription fbDesc = new FramebufferDescription(null, DuplicatorTarget0, DuplicatorTarget1);
+            FramebufferDescription fbDesc = new(null, DuplicatorTarget0, DuplicatorTarget1);
             DuplicatorFramebuffer = factory.CreateFramebuffer(ref fbDesc);
         }
     }
@@ -261,17 +261,17 @@ namespace Veldrid.NeoDemo
             NearShadowMap.Name = "Near Shadow Map";
             NearShadowMapView = factory.CreateTextureView(NearShadowMap);
             NearShadowMapFramebuffer = factory.CreateFramebuffer(new FramebufferDescription(
-                new FramebufferAttachmentDescription(NearShadowMap, 0), Array.Empty<FramebufferAttachmentDescription>()));
+                new FramebufferAttachmentDescription(NearShadowMap, 0), []));
 
             MidShadowMap = factory.CreateTexture(desc);
             MidShadowMapView = factory.CreateTextureView(new TextureViewDescription(MidShadowMap, 0, 1, 0, 1));
             MidShadowMapFramebuffer = factory.CreateFramebuffer(new FramebufferDescription(
-                new FramebufferAttachmentDescription(MidShadowMap, 0), Array.Empty<FramebufferAttachmentDescription>()));
+                new FramebufferAttachmentDescription(MidShadowMap, 0), []));
 
             FarShadowMap = factory.CreateTexture(desc);
             FarShadowMapView = factory.CreateTextureView(new TextureViewDescription(FarShadowMap, 0, 1, 0, 1));
             FarShadowMapFramebuffer = factory.CreateFramebuffer(new FramebufferDescription(
-                new FramebufferAttachmentDescription(FarShadowMap, 0), Array.Empty<FramebufferAttachmentDescription>()));
+                new FramebufferAttachmentDescription(FarShadowMap, 0), []));
         }
 
         public void DestroyDeviceObjects()

@@ -396,9 +396,9 @@ namespace Veldrid.Tests
         public void UpdateUniform_Offset_GraphicsDevice(BufferUsage usage)
         {
             DeviceBuffer buffer = CreateBuffer(128, usage);
-            Matrix4x4 mat1 = new Matrix4x4(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+            Matrix4x4 mat1 = new(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
             GD.UpdateBuffer(buffer, 0, ref mat1);
-            Matrix4x4 mat2 = new Matrix4x4(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+            Matrix4x4 mat2 = new(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
             GD.UpdateBuffer(buffer, 64, ref mat2);
 
             DeviceBuffer readback = GetReadback(buffer);
@@ -417,9 +417,9 @@ namespace Veldrid.Tests
             DeviceBuffer buffer = CreateBuffer(128, usage);
             CommandList cl = RF.CreateCommandList();
             cl.Begin();
-            Matrix4x4 mat1 = new Matrix4x4(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+            Matrix4x4 mat1 = new(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
             cl.UpdateBuffer(buffer, 0, ref mat1);
-            Matrix4x4 mat2 = new Matrix4x4(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+            Matrix4x4 mat2 = new(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
             cl.UpdateBuffer(buffer, 64, ref mat2);
             cl.End();
             GD.SubmitCommands(cl);
@@ -456,7 +456,7 @@ namespace Veldrid.Tests
                 return;
             }
 
-            BufferDescription description = new BufferDescription(64, usage);
+            BufferDescription description = new(64, usage);
             if ((usage & BufferUsage.StructuredBufferReadOnly) != 0 || (usage & BufferUsage.StructuredBufferReadWrite) != 0)
             {
                 description.StructureByteStride = 16;

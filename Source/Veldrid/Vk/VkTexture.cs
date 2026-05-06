@@ -238,7 +238,7 @@ namespace Veldrid.Vk
             SampleCount = sampleCount;
             VkSampleCount = VkFormats.VdToVkSampleCount(sampleCount);
             _optimalImage = existingImage;
-            _imageLayouts = new[] { VkImageLayout.Undefined };
+            _imageLayouts = [VkImageLayout.Undefined];
             _isSwapchainTexture = true;
 
             ClearIfRenderTarget();
@@ -275,7 +275,7 @@ namespace Veldrid.Vk
                 VkImageAspectFlags aspect = (Usage & TextureUsage.DepthStencil) == TextureUsage.DepthStencil
                   ? (VkImageAspectFlags.Depth | VkImageAspectFlags.Stencil)
                   : VkImageAspectFlags.Color;
-                VkImageSubresource imageSubresource = new VkImageSubresource
+                VkImageSubresource imageSubresource = new()
                 {
                     arrayLayer = arrayLayer,
                     mipLevel = mipLevel,
@@ -292,7 +292,7 @@ namespace Veldrid.Vk
                 uint rowPitch = FormatHelpers.GetRowPitch(mipWidth, Format);
                 uint depthPitch = FormatHelpers.GetDepthPitch(rowPitch, mipHeight, Format);
 
-                VkSubresourceLayout layout = new VkSubresourceLayout()
+                VkSubresourceLayout layout = new()
                 {
                     rowPitch = rowPitch,
                     depthPitch = depthPitch,

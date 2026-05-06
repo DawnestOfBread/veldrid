@@ -7,7 +7,7 @@ namespace Veldrid.MTL
 {
     internal class MTLFeatureSupport : IReadOnlyCollection<MTLFeatureSet>
     {
-        private readonly HashSet<MTLFeatureSet> _supportedFeatureSets = new HashSet<MTLFeatureSet>();
+        private readonly HashSet<MTLFeatureSet> _supportedFeatureSets = [];
 
         public bool IsMacOS { get; }
 

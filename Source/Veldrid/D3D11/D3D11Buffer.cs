@@ -10,11 +10,9 @@ namespace Veldrid.D3D11
     {
         private readonly ID3D11Device _device;
         private readonly ID3D11Buffer _buffer;
-        private readonly object _accessViewLock = new object();
-        private readonly Dictionary<OffsetSizePair, ID3D11ShaderResourceView> _srvs
-            = new Dictionary<OffsetSizePair, ID3D11ShaderResourceView>();
-        private readonly Dictionary<OffsetSizePair, ID3D11UnorderedAccessView> _uavs
-            = new Dictionary<OffsetSizePair, ID3D11UnorderedAccessView>();
+        private readonly object _accessViewLock = new();
+        private readonly Dictionary<OffsetSizePair, ID3D11ShaderResourceView> _srvs = new();
+        private readonly Dictionary<OffsetSizePair, ID3D11UnorderedAccessView> _uavs = new();
         private readonly uint _structureByteStride;
         private readonly bool _rawBuffer;
         private string _name;
@@ -35,7 +33,7 @@ namespace Veldrid.D3D11
             _structureByteStride = structureByteStride;
             _rawBuffer = rawBuffer;
 
-            Vortice.Direct3D11.BufferDescription bd = new Vortice.Direct3D11.BufferDescription(
+            Vortice.Direct3D11.BufferDescription bd = new(
                 (int)sizeInBytes,
                 D3D11Formats.VdToD3D11BindFlags(usage),
                 ResourceUsage.Default);
@@ -106,7 +104,7 @@ namespace Veldrid.D3D11
         {
             lock (_accessViewLock)
             {
-                OffsetSizePair pair = new OffsetSizePair(offset, size);
+                OffsetSizePair pair = new(offset, size);
                 if (!_srvs.TryGetValue(pair, out ID3D11ShaderResourceView srv))
                 {
                     srv = CreateShaderResourceView(offset, size);
@@ -121,7 +119,7 @@ namespace Veldrid.D3D11
         {
             lock (_accessViewLock)
             {
-                OffsetSizePair pair = new OffsetSizePair(offset, size);
+                OffsetSizePair pair = new(offset, size);
                 if (!_uavs.TryGetValue(pair, out ID3D11UnorderedAccessView uav))
                 {
                     uav = CreateUnorderedAccessView(offset, size);
@@ -136,7 +134,7 @@ namespace Veldrid.D3D11
         {
             if (_rawBuffer)
             {
-                ShaderResourceViewDescription srvDesc = new ShaderResourceViewDescription(_buffer,
+                ShaderResourceViewDescription srvDesc = new(_buffer,
                     Format.R32_Typeless,
                     (int)offset / 4,
                     (int)size / 4,
@@ -146,7 +144,7 @@ namespace Veldrid.D3D11
             }
             else
             {
-                ShaderResourceViewDescription srvDesc = new ShaderResourceViewDescription
+                ShaderResourceViewDescription srvDesc = new()
                 {
                     ViewDimension = ShaderResourceViewDimension.Buffer
                 };
@@ -160,7 +158,7 @@ namespace Veldrid.D3D11
         {
             if (_rawBuffer)
             {
-                UnorderedAccessViewDescription uavDesc = new UnorderedAccessViewDescription(_buffer,
+                UnorderedAccessViewDescription uavDesc = new(_buffer,
                     Format.R32_Typeless,
                     (int)offset / 4,
                     (int)size / 4,
@@ -170,7 +168,7 @@ namespace Veldrid.D3D11
             }
             else
             {
-                UnorderedAccessViewDescription uavDesc = new UnorderedAccessViewDescription(_buffer,
+                UnorderedAccessViewDescription uavDesc = new(_buffer,
                     Format.Unknown,
                     (int)(offset / _structureByteStride),
                     (int)(size / _structureByteStride)

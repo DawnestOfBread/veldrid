@@ -19,11 +19,11 @@ namespace Veldrid.OpenGL
         private Framebuffer _fb;
         private bool _isSwapchainFB;
         private OpenGLPipeline _graphicsPipeline;
-        private BoundResourceSetInfo[] _graphicsResourceSets = Array.Empty<BoundResourceSetInfo>();
-        private bool[] _newGraphicsResourceSets = Array.Empty<bool>();
-        private OpenGLBuffer[] _vertexBuffers = Array.Empty<OpenGLBuffer>();
-        private uint[] _vbOffsets = Array.Empty<uint>();
-        private uint[] _vertexAttribDivisors = Array.Empty<uint>();
+        private BoundResourceSetInfo[] _graphicsResourceSets = [];
+        private bool[] _newGraphicsResourceSets = [];
+        private OpenGLBuffer[] _vertexBuffers = [];
+        private uint[] _vbOffsets = [];
+        private uint[] _vertexAttribDivisors = [];
         private uint _vertexAttributesBound;
         private readonly Viewport[] _viewports = new Viewport[20];
         private DrawElementsType _drawElementsType;
@@ -31,8 +31,8 @@ namespace Veldrid.OpenGL
         private PrimitiveType _primitiveType;
 
         private OpenGLPipeline _computePipeline;
-        private BoundResourceSetInfo[] _computeResourceSets = Array.Empty<BoundResourceSetInfo>();
-        private bool[] _newComputeResourceSets = Array.Empty<bool>();
+        private BoundResourceSetInfo[] _computeResourceSets = [];
+        private bool[] _newComputeResourceSets = [];
 
         private bool _graphicsPipelineActive;
         private bool _vertexLayoutFlushed;

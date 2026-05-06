@@ -19,7 +19,7 @@ namespace Veldrid.Sdl2
         }
 
         public static implicit operator IntPtr(SDL_Joystick controller) => controller.NativePointer;
-        public static implicit operator SDL_Joystick(IntPtr pointer) => new SDL_Joystick(pointer);
+        public static implicit operator SDL_Joystick(IntPtr pointer) => new(pointer);
     }
 
 

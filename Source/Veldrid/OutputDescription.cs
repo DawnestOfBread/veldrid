@@ -29,7 +29,7 @@ namespace Veldrid
         public OutputDescription(OutputAttachmentDescription? depthAttachment, params OutputAttachmentDescription[] colorAttachments)
         {
             DepthAttachment = depthAttachment;
-            ColorAttachments = colorAttachments ?? Array.Empty<OutputAttachmentDescription>();
+            ColorAttachments = colorAttachments ?? [];
             SampleCount = TextureSampleCount.Count1;
         }
 
@@ -45,7 +45,7 @@ namespace Veldrid
             TextureSampleCount sampleCount)
         {
             DepthAttachment = depthAttachment;
-            ColorAttachments = colorAttachments ?? Array.Empty<OutputAttachmentDescription>();
+            ColorAttachments = colorAttachments ?? [];
             SampleCount = sampleCount;
         }
 

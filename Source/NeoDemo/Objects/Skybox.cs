@@ -21,7 +21,7 @@ namespace Veldrid.NeoDemo.Objects
         private Pipeline _pipeline;
         private Pipeline _reflectionPipeline;
         private ResourceSet _resourceSet;
-        private readonly DisposeCollector _disposeCollector = new DisposeCollector();
+        private readonly DisposeCollector _disposeCollector = new();
 
         public Skybox(
             Image<Rgba32> front, Image<Rgba32> back, Image<Rgba32> left,
@@ -45,16 +45,16 @@ namespace Veldrid.NeoDemo.Objects
             _ib = factory.CreateBuffer(new BufferDescription(s_indices.SizeInBytes(), BufferUsage.IndexBuffer));
             cl.UpdateBuffer(_ib, 0, s_indices);
 
-            ImageSharpCubemapTexture imageSharpCubemapTexture = new ImageSharpCubemapTexture(_right, _left, _top, _bottom, _back, _front, false);
+            ImageSharpCubemapTexture imageSharpCubemapTexture = new(_right, _left, _top, _bottom, _back, _front, false);
 
             Texture textureCube = imageSharpCubemapTexture.CreateDeviceTexture(gd, factory);
             TextureView textureView = factory.CreateTextureView(new TextureViewDescription(textureCube));
 
-            VertexLayoutDescription[] vertexLayouts = new VertexLayoutDescription[]
-            {
-                new VertexLayoutDescription(
+            VertexLayoutDescription[] vertexLayouts =
+            [
+                new(
                     new VertexElementDescription("Position", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float3))
-            };
+            ];
 
             (Shader vs, Shader fs) = StaticResourceCache.GetShaders(gd, gd.ResourceFactory, "Skybox");
 
@@ -64,13 +64,13 @@ namespace Veldrid.NeoDemo.Objects
                 new ResourceLayoutElementDescription("CubeTexture", ResourceKind.TextureReadOnly, ShaderStages.Fragment),
                 new ResourceLayoutElementDescription("CubeSampler", ResourceKind.Sampler, ShaderStages.Fragment)));
 
-            GraphicsPipelineDescription pd = new GraphicsPipelineDescription(
+            GraphicsPipelineDescription pd = new(
                 BlendStateDescription.SingleAlphaBlend,
                 gd.IsDepthRangeZeroToOne ? DepthStencilStateDescription.DepthOnlyGreaterEqual : DepthStencilStateDescription.DepthOnlyLessEqual,
                 new RasterizerStateDescription(FaceCullMode.None, PolygonFillMode.Solid, FrontFace.Clockwise, true, true),
                 PrimitiveTopology.TriangleList,
-                new ShaderSetDescription(vertexLayouts, new[] { vs, fs }, ShaderHelper.GetSpecializations(gd)),
-                new ResourceLayout[] { _layout },
+                new ShaderSetDescription(vertexLayouts, [vs, fs], ShaderHelper.GetSpecializations(gd)),
+                [_layout],
                 sc.MainSceneFramebuffer.OutputDescription);
 
             _pipeline = factory.CreateGraphicsPipeline(ref pd);
@@ -127,49 +127,49 @@ namespace Veldrid.NeoDemo.Objects
             return new RenderOrderKey(ulong.MaxValue);
         }
 
-        private static readonly VertexPosition[] s_vertices = new VertexPosition[]
-        {
+        private static readonly VertexPosition[] s_vertices =
+        [
             // Top
-            new VertexPosition(new Vector3(-20.0f,20.0f,-20.0f)),
-            new VertexPosition(new Vector3(20.0f,20.0f,-20.0f)),
-            new VertexPosition(new Vector3(20.0f,20.0f,20.0f)),
-            new VertexPosition(new Vector3(-20.0f,20.0f,20.0f)),
+            new(new Vector3(-20.0f,20.0f,-20.0f)),
+            new(new Vector3(20.0f,20.0f,-20.0f)),
+            new(new Vector3(20.0f,20.0f,20.0f)),
+            new(new Vector3(-20.0f,20.0f,20.0f)),
             // Bottom
-            new VertexPosition(new Vector3(-20.0f,-20.0f,20.0f)),
-            new VertexPosition(new Vector3(20.0f,-20.0f,20.0f)),
-            new VertexPosition(new Vector3(20.0f,-20.0f,-20.0f)),
-            new VertexPosition(new Vector3(-20.0f,-20.0f,-20.0f)),
+            new(new Vector3(-20.0f,-20.0f,20.0f)),
+            new(new Vector3(20.0f,-20.0f,20.0f)),
+            new(new Vector3(20.0f,-20.0f,-20.0f)),
+            new(new Vector3(-20.0f,-20.0f,-20.0f)),
             // Left
-            new VertexPosition(new Vector3(-20.0f,20.0f,-20.0f)),
-            new VertexPosition(new Vector3(-20.0f,20.0f,20.0f)),
-            new VertexPosition(new Vector3(-20.0f,-20.0f,20.0f)),
-            new VertexPosition(new Vector3(-20.0f,-20.0f,-20.0f)),
+            new(new Vector3(-20.0f,20.0f,-20.0f)),
+            new(new Vector3(-20.0f,20.0f,20.0f)),
+            new(new Vector3(-20.0f,-20.0f,20.0f)),
+            new(new Vector3(-20.0f,-20.0f,-20.0f)),
             // Right
-            new VertexPosition(new Vector3(20.0f,20.0f,20.0f)),
-            new VertexPosition(new Vector3(20.0f,20.0f,-20.0f)),
-            new VertexPosition(new Vector3(20.0f,-20.0f,-20.0f)),
-            new VertexPosition(new Vector3(20.0f,-20.0f,20.0f)),
+            new(new Vector3(20.0f,20.0f,20.0f)),
+            new(new Vector3(20.0f,20.0f,-20.0f)),
+            new(new Vector3(20.0f,-20.0f,-20.0f)),
+            new(new Vector3(20.0f,-20.0f,20.0f)),
             // Back
-            new VertexPosition(new Vector3(20.0f,20.0f,-20.0f)),
-            new VertexPosition(new Vector3(-20.0f,20.0f,-20.0f)),
-            new VertexPosition(new Vector3(-20.0f,-20.0f,-20.0f)),
-            new VertexPosition(new Vector3(20.0f,-20.0f,-20.0f)),
+            new(new Vector3(20.0f,20.0f,-20.0f)),
+            new(new Vector3(-20.0f,20.0f,-20.0f)),
+            new(new Vector3(-20.0f,-20.0f,-20.0f)),
+            new(new Vector3(20.0f,-20.0f,-20.0f)),
             // Front
-            new VertexPosition(new Vector3(-20.0f,20.0f,20.0f)),
-            new VertexPosition(new Vector3(20.0f,20.0f,20.0f)),
-            new VertexPosition(new Vector3(20.0f,-20.0f,20.0f)),
-            new VertexPosition(new Vector3(-20.0f,-20.0f,20.0f)),
-        };
+            new(new Vector3(-20.0f,20.0f,20.0f)),
+            new(new Vector3(20.0f,20.0f,20.0f)),
+            new(new Vector3(20.0f,-20.0f,20.0f)),
+            new(new Vector3(-20.0f,-20.0f,20.0f))
+        ];
 
-        private static readonly ushort[] s_indices = new ushort[]
-        {
+        private static readonly ushort[] s_indices =
+        [
             0,1,2, 0,2,3,
             4,5,6, 4,6,7,
             8,9,10, 8,10,11,
             12,13,14, 12,14,15,
             16,17,18, 16,18,19,
-            20,21,22, 20,22,23,
-        };
+            20,21,22, 20,22,23
+        ];
         private ResourceLayout _layout;
     }
 }

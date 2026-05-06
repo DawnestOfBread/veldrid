@@ -72,10 +72,10 @@ namespace Veldrid.NeoDemo
         public static void CalculateObliqueMatrixPerspective(ref Matrix4x4 projection, Matrix4x4 view, Plane clipPlane)
         {
             Matrix4x4 invTransposeView = VdUtilities.CalculateInverseTranspose(view);
-            Vector4 clipV4 = new Vector4(clipPlane.Normal, clipPlane.D);
+            Vector4 clipV4 = new(clipPlane.Normal, clipPlane.D);
             clipV4 = Vector4.Transform(clipV4, invTransposeView);
 
-            Vector4 q = new Vector4(
+            Vector4 q = new(
                 (Math.Sign(clipV4.X) + projection.M13) / projection.M11,
                 (Math.Sign(clipV4.Y) + projection.M23) / projection.M22,
                 -1f,
@@ -132,7 +132,7 @@ namespace Veldrid.NeoDemo
 
         private static Matrix4x4 CreatePerspective(float fov, float aspectRatio, float near, float far)
         {
-            if (fov <= 0.0f || fov >= MathF.PI)
+            if (fov is <= 0.0f or >= MathF.PI)
                 throw new ArgumentOutOfRangeException(nameof(fov));
 
             if (near <= 0.0f)
@@ -195,23 +195,23 @@ namespace Veldrid.NeoDemo
         {
             if (gd.IsClipSpaceYInverted)
             {
-                return new float[]
-                {
-                        -1, -1, 0, 0,
+                return
+                [
+                    -1, -1, 0, 0,
                         1, -1, 1, 0,
                         1, 1, 1, 1,
                         -1, 1, 0, 1
-                };
+                ];
             }
             else
             {
-                return new float[]
-                {
-                        -1, 1, 0, 0,
+                return
+                [
+                    -1, 1, 0, 0,
                         1, 1, 1, 0,
                         1, -1, 1, 1,
                         -1, -1, 0, 1
-                };
+                ];
             }
         }
     }
