@@ -1,0 +1,27 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Files/">
+    <File Path="..\Directory.Build.props" />
+  </Folder>
+  <Project Path="NeoDemo/NeoDemo.csproj" />
+  <Project Path="Veldrid.ImageSharp/Veldrid.ImageSharp.csproj" />
+  <Project Path="Veldrid.ImGui/Veldrid.ImGui.csproj" />
+  <Project Path="Veldrid.MetalBindings/Veldrid.MetalBindings.csproj" />
+  <Project Path="Veldrid.OpenGLBindings/Veldrid.OpenGLBindings.csproj" />
+  <Project Path="Veldrid.RenderDoc/Veldrid.RenderDoc.csproj" />
+  <Project Path="Veldrid.SDL2/Veldrid.SDL2.csproj" />
+  <Project Path="Veldrid.StartupUtilities/Veldrid.StartupUtilities.csproj" />
+  <Project Path="Veldrid.Tests/Veldrid.Tests.csproj" />
+  <Project Path="Veldrid.Utilities/Veldrid.Utilities.csproj" />
+  <Project Path="Veldrid.VirtualReality.Sample/Veldrid.VirtualReality.Sample.csproj" />
+  <Project Path="Veldrid.VirtualReality/Veldrid.VirtualReality.csproj" />
+  <Project Path="Veldrid/Veldrid.csproj" />
+  <Properties Name="Performance">
+    <Property Name="HasPerformanceSessions" Value="true" />
+  </Properties>
+</Solution>

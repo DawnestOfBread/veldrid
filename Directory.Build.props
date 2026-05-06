@@ -3,11 +3,17 @@
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
     <RepositoryRootDirectory>$(MSBuildThisFileDirectory)</RepositoryRootDirectory>
-    <BinDir>$(RepositoryRootDirectory)bin</BinDir>
-    <OutputPath>$([System.IO.Path]::GetFullPath('$(RepositoryRootDirectory)bin\$(Configuration)'))\$(MSBuildProjectName)</OutputPath>
-    <BaseIntermediateOutputPath>$([System.IO.Path]::GetFullPath('$(RepositoryRootDirectory)bin\obj\$(MSBuildProjectName)'))\</BaseIntermediateOutputPath>
-    <PackageOutputPath>$(BinDir)\Packages\$(Configuration)</PackageOutputPath>
+    <BinDir>$(RepositoryRootDirectory)Build</BinDir>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)\README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
   <PropertyGroup>
     <VeldridSpirvVersion>1.0.14</VeldridSpirvVersion>
@@ -16,11 +22,23 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/mellinoe/veldrid/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/DawnestOfBread/veldrid/master/LICENSE</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Copyright>Copyright 2020 (c) Eric Mellino. All rights reserved.</Copyright>
-    <Authors>Eric Mellino</Authors>
-    <RepositoryUrl>https://github.com/mellinoe/veldrid</RepositoryUrl>
+    <Authors>Eric Mellino, DawnestOfBread</Authors>
+    <RepositoryUrl>https://github.com/DawnestOfBread/veldrid</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NativeLibDirectory>$(MSBuildThisFileDirectory)native/</NativeLibDirectory>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)Intermediate\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
+    <MSBUildProjectExtensionsPath>$(BaseIntermediateOutputPath)</MSBUildProjectExtensionsPath>
+
+    <BuildPath>$(MSBuildThisFileDirectory)Build</BuildPath>
+    <BaseOutputPath>$(BuildPath)\$(ConfigurationProfile)</BaseOutputPath>
+    <OutputPath>$(BaseOutputPath)\$(MSBuildProjectName)</OutputPath>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)\Packages</PackageOutputPath>
   </PropertyGroup>
 
   <PropertyGroup>

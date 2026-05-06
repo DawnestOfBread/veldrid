@@ -1,41 +1,30 @@
-name: Veldrid CI build
+name: Publish NuGet Package
 
 on:
-  create: # when tags are created
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    tags:
+      - 'v*'
 
 jobs:
-  build_windows:
-    runs-on: windows-latest
-
+  build-and-publish:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore src
-    - name: Build
-      run: dotnet build --no-restore src
-    - name: Test
-      run: dotnet test --no-build --verbosity normal src --filter "Backend=D3D11"
-    - name: Build Packages
-      run: dotnet pack src -c Release
-    - name: Publish to MyGet
-      if: github.ref == 'refs/heads/master'
-      run: dotnet nuget push bin\Packages\Release\*.nupkg -s https://www.myget.org/F/mellinoe/api/v3/index.json --api-key ${{secrets.MYGET_KEY}}
-    - name: Publish tagged release to nuget.org
-      if: startsWith(github.ref, 'refs/tags/')
-      run: dotnet nuget push bin\Packages\Release\*.nupkg -s https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_KEY}}
-    - name: Generate GitHub Release
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: softprops/action-gh-release@v1
-      with:
-        files: |
-          bin\Packages\Release\*.nupkg
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Project
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack Package
+        run: dotnet pack --configuration Release --no-build --output out
+
+      - name: Push to NuGet
+        run: dotnet nuget push out/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
